@@ -5,7 +5,7 @@
 git clone http://47.104.79.116:9091/fe-web/laborweb.git
 
 # 进入项目目录
-cd ruoyi-ui
+cd laborweb
 
 # 安装依赖
 npm install
