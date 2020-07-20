@@ -2,7 +2,7 @@
 
 ```bash
 # 克隆项目
-git clone https://gitee.com/y_project/RuoYi-Vue
+git clone http://47.104.79.116:9091/fe-web/laborweb.git
 
 # 进入项目目录
 cd ruoyi-ui
