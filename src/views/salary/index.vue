@@ -64,7 +64,8 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="发放状态：0已发放 1未发放" prop="grantStatus">
+      <!-- ：0已发放 1未发放 -->
+      <el-form-item label="发放状态" prop="grantStatus">
         <el-select
           v-model="queryParams.grantStatus"
           placeholder="请选择发放状态：0已发放 1未发放"
@@ -92,7 +93,8 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="状态：0正常 1停用" prop="state">
+      <!-- ：0正常 1停用 -->
+      <el-form-item label="状态" prop="state">
         <el-input
           v-model="queryParams.state"
           placeholder="请输入状态：0正常 1停用"
