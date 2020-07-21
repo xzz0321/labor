@@ -122,4 +122,6 @@ export const constantRoutes = [
 
 export default new Router({
   mode: 'hash', // hash模式
+  scrollBehavior: () => ({ y: 0 }),
+  routes: constantRoutes
 })
