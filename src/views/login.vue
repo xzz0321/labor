@@ -60,7 +60,7 @@ import { encrypt, decrypt } from '@/utils/jsencrypt'
 
 export default {
   name: "Login",
-  data() {
+  data () {
     return {
       codeUrl: "",
       cookiePassword: "",
@@ -86,24 +86,24 @@ export default {
   },
   watch: {
     $route: {
-      handler: function(route) {
+      handler: function (route) {
         this.redirect = route.query && route.query.redirect;
       },
       immediate: true
     }
   },
-  created() {
+  created () {
     this.getCode();
     this.getCookie();
   },
   methods: {
-    getCode() {
+    async getCode () {
       getCodeImg().then(res => {
         this.codeUrl = "data:image/gif;base64," + res.img;
         this.loginForm.uuid = res.uuid;
       });
     },
-    getCookie() {
+    getCookie () {
       const username = Cookies.get("username");
       const password = Cookies.get("password");
       const rememberMe = Cookies.get('rememberMe')
@@ -113,7 +113,7 @@ export default {
         rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
       };
     },
-    handleLogin() {
+    handleLogin () {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true;
@@ -148,7 +148,7 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100%;
-  background-image: url("../assets/image/login-background.jpg");
+  background-image: url('../assets/image/login-background.jpg');
   background-size: cover;
 }
 .title {

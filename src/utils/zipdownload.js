@@ -7,7 +7,7 @@ const mimeMap = {
 }
 
 const baseUrl = process.env.VUE_APP_BASE_API
-export function downLoadZip(str, filename) {
+export function downLoadZip (str, filename) {
   var url = baseUrl + str
   axios({
     method: 'get',
@@ -23,7 +23,7 @@ export function downLoadZip(str, filename) {
  * @param {*} res blob响应内容
  * @param {String} mimeType MIME类型
  */
-export function resolveBlob(res, mimeType) {
+export function resolveBlob (res, mimeType) {
   const aLink = document.createElement('a')
   var blob = new Blob([res.data], { type: mimeType })
   // //从response的headers中获取filename, 后端response.setHeader("Content-disposition", "attachment; filename=xxxx.docx") 设置的文件名;
