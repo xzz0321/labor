@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 查询用工单位信息列表
-export function listInfo (query) {
+export function listInfo(query) {
   return request({
     url: '/system/info/list',
     method: 'get',
@@ -10,15 +10,15 @@ export function listInfo (query) {
 }
 
 // 查询用工单位信息详细
-export function getInfo (id) {
+export function getInfo(unitId) {
   return request({
-    url: '/system/info/' + id,
+    url: '/system/info/' + unitId,
     method: 'get'
   })
 }
 
 // 新增用工单位信息
-export function addInfo (data) {
+export function addInfo(data) {
   return request({
     url: '/system/info',
     method: 'post',
@@ -27,7 +27,7 @@ export function addInfo (data) {
 }
 
 // 修改用工单位信息
-export function updateInfo (data) {
+export function updateInfo(data) {
   return request({
     url: '/system/info',
     method: 'put',
@@ -36,15 +36,15 @@ export function updateInfo (data) {
 }
 
 // 删除用工单位信息
-export function delInfo (id) {
+export function delInfo(unitId) {
   return request({
-    url: '/system/info/' + id,
+    url: '/system/info/' + unitId,
     method: 'delete'
   })
 }
 
 // 导出用工单位信息
-export function exportInfo (query) {
+export function exportInfo(query) {
   return request({
     url: '/system/info/export',
     method: 'get',

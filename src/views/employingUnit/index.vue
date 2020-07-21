@@ -1,260 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="主键id" prop="id">
-        <el-input
-          v-model="queryParams.id"
-          placeholder="请输入主键id"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="公司编号" prop="companyNumber">
-        <el-input
-          v-model="queryParams.companyNumber"
-          placeholder="请输入公司编号"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="公司名称或个人姓名" prop="companyName">
         <el-input
           v-model="queryParams.companyName"
           placeholder="请输入公司名称或个人姓名"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="散户或单位" prop="personageOrUnit">
-        <el-select
-          v-model="queryParams.personageOrUnit"
-          placeholder="请选择散户或单位"
-          clearable
-          size="small"
-        >
-          <el-option
-            v-for="dict in personageOrUnitOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="单位类型" prop="unitType">
-        <el-select v-model="queryParams.unitType" placeholder="请选择单位类型" clearable size="small">
-          <el-option
-            v-for="dict in unitTypeOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="统一社会信用代码" prop="creditCode">
-        <el-input
-          v-model="queryParams.creditCode"
-          placeholder="请输入统一社会信用代码"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="法定代表人" prop="legalPerson">
-        <el-input
-          v-model="queryParams.legalPerson"
-          placeholder="请输入法定代表人"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="开户银行" prop="depositBank">
-        <el-input
-          v-model="queryParams.depositBank"
-          placeholder="请输入开户银行"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="开户银行账号" prop="depositBankAccount">
-        <el-input
-          v-model="queryParams.depositBankAccount"
-          placeholder="请输入开户银行账号"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="地址" prop="address">
-        <el-input
-          v-model="queryParams.address"
-          placeholder="请输入地址"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="联系人" prop="linkman">
-        <el-input
-          v-model="queryParams.linkman"
-          placeholder="请输入联系人"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="联系电话" prop="phone">
-        <el-input
-          v-model="queryParams.phone"
-          placeholder="请输入联系电话"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="开票类型" prop="billType">
-        <el-select v-model="queryParams.billType" placeholder="请选择开票类型" clearable size="small">
-          <el-option
-            v-for="dict in billTypeOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="开票信息1" prop="billInfoOne">
-        <el-input
-          v-model="queryParams.billInfoOne"
-          placeholder="请输入开票信息1"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="开票信息2" prop="billInfoTwo">
-        <el-input
-          v-model="queryParams.billInfoTwo"
-          placeholder="请输入开票信息2"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="开票信息3" prop="billInfoThree">
-        <el-input
-          v-model="queryParams.billInfoThree"
-          placeholder="请输入开票信息3"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="开票信息4" prop="billInfoFour">
-        <el-input
-          v-model="queryParams.billInfoFour"
-          placeholder="请输入开票信息4"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="开票信息5" prop="billInfoFive">
-        <el-input
-          v-model="queryParams.billInfoFive"
-          placeholder="请输入开票信息5"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="业务员" prop="salesman">
-        <el-input
-          v-model="queryParams.salesman"
-          placeholder="请输入业务员"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="管理员" prop="administrator">
-        <el-input
-          v-model="queryParams.administrator"
-          placeholder="请输入管理员"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="介绍人" prop="introducer">
-        <el-input
-          v-model="queryParams.introducer"
-          placeholder="请输入介绍人"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="合同编号" prop="contractNumber">
-        <el-input
-          v-model="queryParams.contractNumber"
-          placeholder="请输入合同编号"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="合同起始日" prop="contractStartTime">
-        <el-date-picker
-          clearable
-          size="small"
-          style="width: 200px"
-          v-model="queryParams.contractStartTime"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="选择合同起始日"
-        ></el-date-picker>
-      </el-form-item>
-      <el-form-item label="合同结束日" prop="contractEndTime">
-        <el-date-picker
-          clearable
-          size="small"
-          style="width: 200px"
-          v-model="queryParams.contractEndTime"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="选择合同结束日"
-        ></el-date-picker>
-      </el-form-item>
-      <el-form-item label="月度收款提醒日" prop="reminderTime">
-        <el-date-picker
-          clearable
-          size="small"
-          style="width: 200px"
-          v-model="queryParams.reminderTime"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="选择月度收款提醒日"
-        ></el-date-picker>
-      </el-form-item>
-      <el-form-item label="最后修改日期" prop="endUpdateTime">
-        <el-date-picker
-          clearable
-          size="small"
-          style="width: 200px"
-          v-model="queryParams.endUpdateTime"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="选择最后修改日期"
-        ></el-date-picker>
-      </el-form-item>
-      <el-form-item label="删除标记" prop="delFlag">
-        <el-input
-          v-model="queryParams.delFlag"
-          placeholder="请输入删除标记"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -309,7 +59,7 @@
 
     <el-table v-loading="loading" :data="infoList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主键id" align="center" prop="id" />
+      <el-table-column label="主键id" align="center" prop="unitId" />
       <el-table-column label="公司编号" align="center" prop="companyNumber" />
       <el-table-column label="公司名称或个人姓名" align="center" prop="companyName" />
       <el-table-column
@@ -557,33 +307,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        id: undefined,
-        companyNumber: undefined,
         companyName: undefined,
-        personageOrUnit: undefined,
-        unitType: undefined,
-        creditCode: undefined,
-        legalPerson: undefined,
-        depositBank: undefined,
-        depositBankAccount: undefined,
-        address: undefined,
-        linkman: undefined,
-        phone: undefined,
-        billType: undefined,
-        billInfoOne: undefined,
-        billInfoTwo: undefined,
-        billInfoThree: undefined,
-        billInfoFour: undefined,
-        billInfoFive: undefined,
-        salesman: undefined,
-        administrator: undefined,
-        introducer: undefined,
-        contractNumber: undefined,
-        contractStartTime: undefined,
-        contractEndTime: undefined,
-        reminderTime: undefined,
-        endUpdateTime: undefined,
-        delFlag: undefined,
       },
       // 表单参数
       form: {},
@@ -634,7 +358,7 @@ export default {
     // 表单重置
     reset () {
       this.form = {
-        id: undefined,
+        unitId: undefined,
         companyNumber: undefined,
         companyName: undefined,
         personageOrUnit: undefined,
@@ -681,7 +405,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange (selection) {
-      this.ids = selection.map(item => item.id)
+      this.ids = selection.map(item => item.unitId)
       this.single = selection.length != 1
       this.multiple = !selection.length
     },
@@ -694,8 +418,8 @@ export default {
     /** 修改按钮操作 */
     handleUpdate (row) {
       this.reset();
-      const id = row.id || this.ids
-      getInfo(id).then(response => {
+      const unitId = row.unitId || this.ids
+      getInfo(unitId).then(response => {
         this.form = response.data;
         this.open = true;
         this.title = "修改用工单位信息";
@@ -705,7 +429,7 @@ export default {
     submitForm: function () {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.id != undefined) {
+          if (this.form.unitId != undefined) {
             updateInfo(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
@@ -727,13 +451,13 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete (row) {
-      const ids = row.id || this.ids;
-      this.$confirm('是否确认删除用工单位信息编号为"' + ids + '"的数据项?', "警告", {
+      const unitIds = row.unitId || this.ids;
+      this.$confirm('是否确认删除用工单位信息编号为"' + unitIds + '"的数据项?', "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       }).then(function () {
-        return delInfo(ids);
+        return delInfo(unitIds);
       }).then(() => {
         this.getList();
         this.msgSuccess("删除成功");
