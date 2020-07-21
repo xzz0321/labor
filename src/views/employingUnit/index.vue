@@ -45,7 +45,12 @@
       </el-form-item>
       <el-form-item label="单位类型" prop="unitType">
         <el-select v-model="queryParams.unitType" placeholder="请选择单位类型" clearable size="small">
-          <el-option label="请选择字典生成" value />
+          <el-option
+            v-for="dict in unitTypeOptions"
+            :key="dict.dictValue"
+            :label="dict.dictLabel"
+            :value="dict.dictValue"
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="统一社会信用代码" prop="creditCode">
@@ -255,55 +260,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="修改时间" prop="updateTime">
-        <el-date-picker
-          clearable
-          size="small"
-          style="width: 200px"
-          v-model="queryParams.updateTime"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="选择修改时间"
-        ></el-date-picker>
-      </el-form-item>
-      <el-form-item label="修改人" prop="updateBy">
-        <el-input
-          v-model="queryParams.updateBy"
-          placeholder="请输入修改人"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="创建时间" prop="createTime">
-        <el-date-picker
-          clearable
-          size="small"
-          style="width: 200px"
-          v-model="queryParams.createTime"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="选择创建时间"
-        ></el-date-picker>
-      </el-form-item>
-      <el-form-item label="创建人" prop="createBy">
-        <el-input
-          v-model="queryParams.createBy"
-          placeholder="请输入创建人"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="备注" prop="remark">
-        <el-input
-          v-model="queryParams.remark"
-          placeholder="请输入备注"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -362,7 +318,7 @@
         prop="personageOrUnit"
         :formatter="personageOrUnitFormat"
       />
-      <el-table-column label="单位类型" align="center" prop="unitType" />
+      <el-table-column label="单位类型" align="center" prop="unitType" :formatter="unitTypeFormat" />
       <el-table-column label="统一社会信用代码" align="center" prop="creditCode" />
       <el-table-column label="法定代表人" align="center" prop="legalPerson" />
       <el-table-column label="开户银行" align="center" prop="depositBank" />
@@ -400,18 +356,6 @@
           <span>{{ parseTime(scope.row.endUpdateTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="修改时间" align="center" prop="updateTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="修改人" align="center" prop="updateBy" />
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="创建人" align="center" prop="createBy" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -461,7 +405,12 @@
         </el-form-item>
         <el-form-item label="单位类型">
           <el-select v-model="form.unitType" placeholder="请选择单位类型">
-            <el-option label="请选择字典生成" value />
+            <el-option
+              v-for="dict in unitTypeOptions"
+              :key="dict.dictValue"
+              :label="dict.dictLabel"
+              :value="parseInt(dict.dictValue)"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="统一社会信用代码" prop="creditCode">
@@ -566,9 +515,6 @@
             placeholder="选择最后修改日期"
           ></el-date-picker>
         </el-form-item>
-        <el-form-item label="删除标记" prop="delFlag">
-          <el-input v-model="form.delFlag" placeholder="请输入删除标记" />
-        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -603,6 +549,8 @@ export default {
       open: false,
       // 散户或单位字典
       personageOrUnitOptions: [],
+      // 单位类型字典
+      unitTypeOptions: [],
       // 开票类型字典
       billTypeOptions: [],
       // 查询参数
@@ -636,11 +584,6 @@ export default {
         reminderTime: undefined,
         endUpdateTime: undefined,
         delFlag: undefined,
-        updateTime: undefined,
-        updateBy: undefined,
-        createTime: undefined,
-        createBy: undefined,
-        remark: undefined
       },
       // 表单参数
       form: {},
@@ -653,6 +596,9 @@ export default {
     this.getList();
     this.getDicts("personage_unit").then(response => {
       this.personageOrUnitOptions = response.data;
+    });
+    this.getDicts("sys_unit_type").then(response => {
+      this.unitTypeOptions = response.data;
     });
     this.getDicts("bill_type").then(response => {
       this.billTypeOptions = response.data;
@@ -671,6 +617,10 @@ export default {
     // 散户或单位字典翻译
     personageOrUnitFormat (row, column) {
       return this.selectDictLabel(this.personageOrUnitOptions, row.personageOrUnit);
+    },
+    // 单位类型字典翻译
+    unitTypeFormat (row, column) {
+      return this.selectDictLabel(this.unitTypeOptions, row.unitType);
     },
     // 开票类型字典翻译
     billTypeFormat (row, column) {
