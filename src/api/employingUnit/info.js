@@ -1,52 +1,52 @@
 import request from '@/utils/request'
 
 // 查询用工单位信息列表
-export function listInfo(query) {
+export function listUnitinfo (query) {
   return request({
-    url: '/system/info/list',
+    url: '/business/unitinfo/list',
     method: 'get',
     params: query
   })
 }
 
 // 查询用工单位信息详细
-export function getInfo(unitId) {
+export function getUnitinfo (unitId) {
   return request({
-    url: '/system/info/' + unitId,
+    url: '/business/unitinfo/' + unitId,
     method: 'get'
   })
 }
 
 // 新增用工单位信息
-export function addInfo(data) {
+export function addUnitinfo (data) {
   return request({
-    url: '/system/info',
+    url: '/business/unitinfo',
     method: 'post',
     data: data
   })
 }
 
 // 修改用工单位信息
-export function updateInfo(data) {
+export function updateUnitinfo (data) {
   return request({
-    url: '/system/info',
+    url: '/business/unitinfo',
     method: 'put',
     data: data
   })
 }
 
 // 删除用工单位信息
-export function delInfo(unitId) {
+export function delUnitinfo (unitId) {
   return request({
-    url: '/system/info/' + unitId,
+    url: '/business/unitinfo/' + unitId,
     method: 'delete'
   })
 }
 
 // 导出用工单位信息
-export function exportInfo(query) {
+export function exportUnitinfo (query) {
   return request({
-    url: '/system/info/export',
+    url: '/business/unitinfo/export',
     method: 'get',
     params: query
   })

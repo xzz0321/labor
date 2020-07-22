@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="170px">
       <el-form-item label="公司名称或个人姓名" prop="companyName">
         <el-input
           v-model="queryParams.companyName"
@@ -23,7 +23,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:info:add']"
+          v-hasPermi="['business:unitinfo:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -33,7 +33,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['system:info:edit']"
+          v-hasPermi="['business:unitinfo:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -43,7 +43,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['system:info:remove']"
+          v-hasPermi="['business:unitinfo:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -52,27 +52,28 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['system:info:export']"
+          v-hasPermi="['business:unitinfo:export']"
         >导出</el-button>
       </el-col>
     </el-row>
 
-    <el-table v-loading="loading" :data="infoList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="unitinfoList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="主键id" align="center" prop="unitId" />
       <el-table-column label="公司编号" align="center" prop="companyNumber" />
-      <el-table-column label="公司名称或个人姓名" align="center" prop="companyName" />
+      <el-table-column label="公司名称或个人姓名" align="center" prop="companyName" width="160" />
       <el-table-column
         label="散户或单位"
         align="center"
         prop="personageOrUnit"
         :formatter="personageOrUnitFormat"
+        width="130"
       />
       <el-table-column label="单位类型" align="center" prop="unitType" :formatter="unitTypeFormat" />
-      <el-table-column label="统一社会信用代码" align="center" prop="creditCode" />
-      <el-table-column label="法定代表人" align="center" prop="legalPerson" />
+      <el-table-column label="统一社会信用代码" align="center" prop="creditCode" width="130" />
+      <el-table-column label="法定代表人" align="center" prop="legalPerson" width="130" />
       <el-table-column label="开户银行" align="center" prop="depositBank" />
-      <el-table-column label="开户银行账号" align="center" prop="depositBankAccount" />
+      <el-table-column label="开户银行账号" align="center" prop="depositBankAccount" width="130" />
       <el-table-column label="地址" align="center" prop="address" />
       <el-table-column label="联系人" align="center" prop="linkman" />
       <el-table-column label="联系电话" align="center" prop="phone" />
@@ -113,14 +114,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:info:edit']"
+            v-hasPermi="['business:unitinfo:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:info:remove']"
+            v-hasPermi="['business:unitinfo:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -135,8 +136,8 @@
     />
 
     <!-- 添加或修改用工单位信息对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="140px">
         <el-form-item label="公司编号" prop="companyNumber">
           <el-input v-model="form.companyNumber" placeholder="请输入公司编号" />
         </el-form-item>
@@ -275,7 +276,7 @@
 </template>
 
 <script>
-import { listInfo, getInfo, delInfo, addInfo, updateInfo, exportInfo } from "@/api/employingUnit/info";
+import { listUnitinfo, getUnitinfo, delUnitinfo, addUnitinfo, updateUnitinfo, exportUnitinfo } from "@/api/employingUnit/info";
 
 export default {
   name: "employingUnit",
@@ -292,7 +293,7 @@ export default {
       // 总条数
       total: 0,
       // 用工单位信息表格数据
-      infoList: [],
+      unitinfoList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -332,8 +333,8 @@ export default {
     /** 查询用工单位信息列表 */
     getList () {
       this.loading = true;
-      listInfo(this.queryParams).then(response => {
-        this.infoList = response.rows;
+      listUnitinfo(this.queryParams).then(response => {
+        this.unitinfoList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -419,7 +420,7 @@ export default {
     handleUpdate (row) {
       this.reset();
       const unitId = row.unitId || this.ids
-      getInfo(unitId).then(response => {
+      getUnitinfo(unitId).then(response => {
         this.form = response.data;
         this.open = true;
         this.title = "修改用工单位信息";
@@ -430,7 +431,7 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.unitId != undefined) {
-            updateInfo(this.form).then(response => {
+            updateUnitinfo(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
                 this.open = false;
@@ -438,7 +439,7 @@ export default {
               }
             });
           } else {
-            addInfo(this.form).then(response => {
+            addUnitinfo(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
                 this.open = false;
@@ -457,7 +458,7 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(function () {
-        return delInfo(unitIds);
+        return delUnitinfo(unitIds);
       }).then(() => {
         this.getList();
         this.msgSuccess("删除成功");
@@ -471,7 +472,7 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(function () {
-        return exportInfo(queryParams);
+        return exportUnitinfo(queryParams);
       }).then(response => {
         this.download(response.msg);
       }).catch(function () { });
