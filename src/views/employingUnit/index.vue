@@ -59,7 +59,7 @@
 
     <el-table v-loading="loading" :data="unitinfoList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主键id" align="center" prop="unitId" />
+      <!-- <el-table-column label="主键id" align="center" prop="unitId" /> -->
       <el-table-column label="公司编号" align="center" prop="companyNumber" />
       <el-table-column label="公司名称或个人姓名" align="center" prop="companyName" width="160" />
       <el-table-column
