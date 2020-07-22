@@ -87,22 +87,22 @@
       <el-table-column label="管理员" align="center" prop="administrator" />
       <el-table-column label="介绍人" align="center" prop="introducer" />
       <el-table-column label="合同编号" align="center" prop="contractNumber" />
-      <el-table-column label="合同起始日" align="center" prop="contractStartTime" width="180">
+      <el-table-column label="合同起始日" align="center" prop="contractStartTime" width="130">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.contractStartTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="合同结束日" align="center" prop="contractEndTime" width="180">
+      <el-table-column label="合同结束日" align="center" prop="contractEndTime" width="130">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.contractEndTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="月度收款提醒日" align="center" prop="reminderTime" width="180">
+      <el-table-column label="月度收款提醒日" align="center" prop="reminderTime" width="130">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.reminderTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="最后修改日期" align="center" prop="endUpdateTime" width="180">
+      <el-table-column label="最后修改日期" align="center" prop="endUpdateTime" width="130">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.endUpdateTime, '{y}-{m}-{d}') }}</span>
         </template>
