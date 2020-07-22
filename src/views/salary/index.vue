@@ -66,13 +66,13 @@
       </el-form-item>
       <!-- ：0已发放 1未发放 -->
       <el-form-item label="发放状态" prop="grantStatus">
-        <el-select
-          v-model="queryParams.grantStatus"
-          placeholder="请选择发放状态：0已发放 1未发放"
-          clearable
-          size="small"
-        >
-          <el-option label="请选择字典生成" value />
+        <el-select v-model="queryParams.grantStatus" placeholder="请选择发放状态" clearable size="small">
+          <el-option
+            v-for="dict in grantStatusOptions"
+            :key="dict.dictValue"
+            :label="dict.dictLabel"
+            :value="dict.dictValue"
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="工资年份" prop="wagesYear">
@@ -95,13 +95,14 @@
       </el-form-item>
       <!-- ：0正常 1停用 -->
       <el-form-item label="状态" prop="state">
-        <el-input
-          v-model="queryParams.state"
-          placeholder="请输入状态：0正常 1停用"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.state" placeholder="请选择状态" clearable size="small">
+          <el-option
+            v-for="dict in stateOptions"
+            :key="dict.dictValue"
+            :label="dict.dictLabel"
+            :value="dict.dictValue"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -160,11 +161,18 @@
       <el-table-column label="客户单位" align="center" prop="clientUnit" />
       <el-table-column label="应发工资" align="center" prop="salaryPayable" />
       <el-table-column label="实发工资" align="center" prop="salaryNet" />
-      <el-table-column label="发放状态：0已发放 1未发放" align="center" prop="grantStatus" />
+      <!-- ：0已发放 1未发放 -->
+      <el-table-column
+        label="发放状态"
+        align="center"
+        prop="grantStatus"
+        :formatter="grantStatusFormat"
+      />
       <el-table-column label="工资年份" align="center" prop="wagesYear" />
       <el-table-column label="工资月份" align="center" prop="wagesMonth" />
       <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="状态：0正常 1停用" align="center" prop="state" />
+      <!-- ：0正常 1停用 -->
+      <el-table-column label="状态" align="center" prop="state" :formatter="stateFormat" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -217,10 +225,16 @@
         <el-form-item label="实发工资" prop="salaryNet">
           <el-input v-model="form.salaryNet" placeholder="请输入实发工资" />
         </el-form-item>
-        <el-form-item label="发放状态：0已发放 1未发放">
-          <el-radio-group v-model="form.grantStatus">
-            <el-radio label="1">请选择字典生成</el-radio>
-          </el-radio-group>
+        <!-- ：0已发放 1未发放 -->
+        <el-form-item label="发放状态">
+          <el-select v-model="form.grantStatus" placeholder="请选择发放状态">
+            <el-option
+              v-for="dict in grantStatusOptions"
+              :key="dict.dictValue"
+              :label="dict.dictLabel"
+              :value="dict.dictValue"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="工资年份" prop="wagesYear">
           <el-input v-model="form.wagesYear" placeholder="请输入工资年份" />
@@ -231,8 +245,16 @@
         <el-form-item label="删除标记" prop="delFlag">
           <el-input v-model="form.delFlag" placeholder="请输入删除标记" />
         </el-form-item>
-        <el-form-item label="状态：0正常 1停用" prop="state">
-          <el-input v-model="form.state" placeholder="请输入状态：0正常 1停用" />
+        <!-- ：0正常 1停用 -->
+        <el-form-item label="状态">
+          <el-select v-model="form.state" placeholder="请选择状态">
+            <el-option
+              v-for="dict in stateOptions"
+              :key="dict.dictValue"
+              :label="dict.dictLabel"
+              :value="dict.dictValue"
+            ></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -266,6 +288,10 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 发放状态：0已发放 1未发放字典
+      grantStatusOptions: [],
+      // 状态：0正常 1停用字典
+      stateOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -291,6 +317,12 @@ export default {
   },
   created () {
     this.getList();
+    this.getDicts("grant_status").then(response => {
+      this.grantStatusOptions = response.data;
+    });
+    this.getDicts("sys_job_status").then(response => {
+      this.stateOptions = response.data;
+    });
   },
   methods: {
     /** 查询工资管理列表 */
@@ -301,6 +333,14 @@ export default {
         this.total = response.total;
         this.loading = false;
       });
+    },
+    // 发放状态：0已发放 1未发放字典翻译
+    grantStatusFormat (row, column) {
+      return this.selectDictLabel(this.grantStatusOptions, row.grantStatus);
+    },
+    // 状态：0正常 1停用字典翻译
+    stateFormat (row, column) {
+      return this.selectDictLabel(this.stateOptions, row.state);
     },
     // 取消按钮
     cancel () {
@@ -318,7 +358,7 @@ export default {
         clientUnit: undefined,
         salaryPayable: undefined,
         salaryNet: undefined,
-        grantStatus: "0",
+        grantStatus: undefined,
         wagesYear: undefined,
         wagesMonth: undefined,
         createTime: undefined,

@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 查询工资管理列表
-export function listManage (query) {
+export function listManage(query) {
   return request({
     url: '/business/manage/list',
     method: 'get',
@@ -10,7 +10,7 @@ export function listManage (query) {
 }
 
 // 查询工资管理详细
-export function getManage (id) {
+export function getManage(id) {
   return request({
     url: '/business/manage/' + id,
     method: 'get'
@@ -18,7 +18,7 @@ export function getManage (id) {
 }
 
 // 新增工资管理
-export function addManage (data) {
+export function addManage(data) {
   return request({
     url: '/business/manage',
     method: 'post',
@@ -27,7 +27,7 @@ export function addManage (data) {
 }
 
 // 修改工资管理
-export function updateManage (data) {
+export function updateManage(data) {
   return request({
     url: '/business/manage',
     method: 'put',
@@ -36,7 +36,7 @@ export function updateManage (data) {
 }
 
 // 删除工资管理
-export function delManage (id) {
+export function delManage(id) {
   return request({
     url: '/business/manage/' + id,
     method: 'delete'
@@ -44,7 +44,7 @@ export function delManage (id) {
 }
 
 // 导出工资管理
-export function exportManage (query) {
+export function exportManage(query) {
   return request({
     url: '/business/manage/export',
     method: 'get',
