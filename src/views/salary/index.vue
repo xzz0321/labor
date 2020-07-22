@@ -153,7 +153,7 @@
 
     <el-table v-loading="loading" :data="manageList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主键id" align="center" prop="id" />
+      <!-- <el-table-column label="主键id" align="center" prop="id" /> -->
       <el-table-column label="用户id" align="center" prop="userId" />
       <el-table-column label="部门id" align="center" prop="deptId" />
       <el-table-column label="用户昵称" align="center" prop="nickName" />
@@ -170,7 +170,7 @@
       />
       <el-table-column label="工资年份" align="center" prop="wagesYear" />
       <el-table-column label="工资月份" align="center" prop="wagesMonth" />
-      <el-table-column label="备注" align="center" prop="remark" />
+      <!-- <el-table-column label="备注" align="center" prop="remark" /> -->
       <!-- ：0正常 1停用 -->
       <el-table-column label="状态" align="center" prop="state" :formatter="stateFormat" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
