@@ -1,7 +1,7 @@
 <!-- 综合统计查询-公积金增减员月报 -->
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="80px">
       <el-form-item label="公司名称" prop="grantStatus">
         <el-select v-model="queryParams.grantStatus" placeholder="请选择公司名称" clearable size="small">
           <el-option label="公司名称" value="公司名称" />
@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { } from "@/api/synthetical/workersIncreas";
+import { listWorkersIncreas, exportWorkersIncreas } from "@/api/synthetical/workersIncreas";
 
 export default {
   name: "workersIncreas",
@@ -78,15 +78,15 @@ export default {
   },
   created () {
     this.getList();
-    this.getDicts("grant_status").then(response => {
-      this.grantStatusOptions = response.data;
-    });
+    // this.getDicts("grant_status").then(response => {
+    //   this.grantStatusOptions = response.data;
+    // });
   },
   methods: {
     /** 查询工资管理列表 */
     getList () {
       this.loading = true;
-      // listManage(this.queryParams).then(response => {
+      // listWorkersIncreas(this.queryParams).then(response => {
       //   this.manageList = response.rows;
       //   this.total = response.total;
       this.loading = false;
@@ -122,16 +122,16 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport () {
-      // const queryParams = this.queryParams;
-      // this.$confirm('是否确认导出所有工资管理数据项?', "警告", {
-      //   confirmButtonText: "确定",
-      //   cancelButtonText: "取消",
-      //   type: "warning"
-      // }).then(function () {
-      //   return exportManage(queryParams);
-      // }).then(response => {
-      //   this.download(response.msg);
-      // }).catch(function () { });
+      const queryParams = this.queryParams;
+      this.$confirm('是否确认导出所有公积金增减员月报数据项?', "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(function () {
+        // return exportWorkersIncreas(queryParams);
+      }).then(response => {
+        // this.download(response.msg);
+      }).catch(function () { });
     }
   }
 };

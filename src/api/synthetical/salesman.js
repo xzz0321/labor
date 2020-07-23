@@ -4,7 +4,7 @@ import request from '@/utils/request'
 // 查询列表
 export function listSalesman (query) {
   return request({
-    url: '',
+    url: '/statistic/info/salesmanList',
     method: 'get',
     params: query
   })
@@ -13,7 +13,7 @@ export function listSalesman (query) {
 // 导出
 export function exportSalesman (query) {
   return request({
-    url: '',
+    url: '/statistic/info/salesmanExport',
     method: 'get',
     params: query
   })

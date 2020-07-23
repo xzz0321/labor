@@ -4,7 +4,7 @@ import request from '@/utils/request'
 // 查询列表
 export function listHistory (query) {
   return request({
-    url: '',
+    url: '/statistic/info/historyList',
     method: 'get',
     params: query
   })
@@ -13,7 +13,7 @@ export function listHistory (query) {
 // 导出
 export function exportHistory (query) {
   return request({
-    url: '',
+    url: '/statistic/info/historyExport',
     method: 'get',
     params: query
   })

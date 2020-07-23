@@ -1,7 +1,7 @@
 <!-- 综合统计查询-客户账单明细 -->
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="80px">
       <el-form-item label="姓名" prop="userId">
         <el-input
           v-model="queryParams.userId"
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { } from "@/api/synthetical/bill";
+import { listBill, exportBill } from "@/api/synthetical/bill";
 
 export default {
   name: "bill",
@@ -93,15 +93,15 @@ export default {
   },
   created () {
     this.getList();
-    this.getDicts("grant_status").then(response => {
-      this.grantStatusOptions = response.data;
-    });
+    // this.getDicts("grant_status").then(response => {
+    //   this.grantStatusOptions = response.data;
+    // });
   },
   methods: {
     /** 查询工资管理列表 */
     getList () {
       this.loading = true;
-      // listManage(this.queryParams).then(response => {
+      // listBill(this.queryParams).then(response => {
       //   this.manageList = response.rows;
       //   this.total = response.total;
       this.loading = false;
@@ -139,12 +139,12 @@ export default {
     /** 导出按钮操作 */
     handleExport () {
       const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有工资管理数据项?', "警告", {
+      this.$confirm('是否确认导出所有客户账单明细?', "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       }).then(function () {
-        // return exportManage(queryParams);
+        // return exportBill(queryParams);
       }).then(response => {
         // this.download(response.msg);
       }).catch(function () { });

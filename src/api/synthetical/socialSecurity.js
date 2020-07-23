@@ -4,7 +4,7 @@ import request from '@/utils/request'
 // 查询列表
 export function listSocialSecurity (query) {
   return request({
-    url: '',
+    url: '/statistic/info/socialSecurityList',
     method: 'get',
     params: query
   })
@@ -13,7 +13,7 @@ export function listSocialSecurity (query) {
 // 导出
 export function exportSocialSecurity (query) {
   return request({
-    url: '',
+    url: '/statistic/info/socialSecurityExport',
     method: 'get',
     params: query
   })

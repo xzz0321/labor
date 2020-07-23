@@ -4,7 +4,7 @@ import request from '@/utils/request'
 // 查询列表
 export function listBill (query) {
   return request({
-    url: '',
+    url: '/statistic/info/arrearsList',
     method: 'get',
     params: query
   })
@@ -13,7 +13,7 @@ export function listBill (query) {
 // 导出
 export function exportBill (query) {
   return request({
-    url: '',
+    url: '/statistic/info/arrearsExport',
     method: 'get',
     params: query
   })

@@ -4,7 +4,7 @@ import request from '@/utils/request'
 // 查询列表
 export function listMonthly (query) {
   return request({
-    url: '',
+    url: '/statistic/info/monthlyList',
     method: 'get',
     params: query
   })
@@ -13,7 +13,7 @@ export function listMonthly (query) {
 // 导出
 export function exportMonthly (query) {
   return request({
-    url: '',
+    url: '/statistic/info/monthlyExport',
     method: 'get',
     params: query
   })
