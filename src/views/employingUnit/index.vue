@@ -59,7 +59,13 @@
 
     <el-table v-loading="loading" :data="unitinfoList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <!-- <el-table-column label="主键id" align="center" prop="unitId" /> -->
+      <!-- <el-table-column
+        label="派遣公司"
+        align="center"
+        prop="personageOrUnit"
+        :formatter="DispatchFormat"
+        width="130"
+      />-->
       <el-table-column label="公司编号" align="center" prop="companyNumber" />
       <el-table-column label="公司名称或个人姓名" align="center" prop="companyName" width="160" />
       <el-table-column
@@ -137,7 +143,17 @@
 
     <!-- 添加或修改用工单位信息对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="140px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="150px">
+        <el-form-item label="派遣公司" v-if="title == '添加用工单位信息'" prop="dispatchingId">
+          <el-select v-model="form.dispatchingId" placeholder="请选择派遣公司">
+            <el-option
+              v-for="dict in dispatchOptions"
+              :key="dict.number"
+              :label="dict.name"
+              :value="dict.number"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="公司编号" prop="companyNumber">
           <el-input v-model="form.companyNumber" placeholder="请输入公司编号" />
         </el-form-item>
@@ -277,6 +293,7 @@
 
 <script>
 import { listUnitinfo, getUnitinfo, delUnitinfo, addUnitinfo, updateUnitinfo, exportUnitinfo } from "@/api/employingUnit/info";
+import { getDispatch, selectDispatch } from "@/api/employingUnit/index";
 
 export default {
   name: "employingUnit",
@@ -302,8 +319,10 @@ export default {
       personageOrUnitOptions: [],
       // 单位类型字典
       unitTypeOptions: [],
-      // 开票类型字典
-      billTypeOptions: [],
+      // 单位类型字典
+      unitTypeOptions: [],
+      // 派遣公司
+      dispatchOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -312,8 +331,19 @@ export default {
       },
       // 表单参数
       form: {},
+      personageOrUnit: '',
       // 表单校验
       rules: {
+        dispatchingId: [{ required: true, message: '请选择', trigger: 'blur' }],
+        companyNumber: [{ required: true, message: '请输入', trigger: 'blur' }],
+        companyName: [{ required: true, message: '请输入', trigger: 'blur' }],
+        creditCode: [{ required: true, message: '请输入', trigger: 'blur' }],
+        legalPerson: [{ required: true, message: '请输入', trigger: 'blur' }],
+        depositBank: [{ required: true, message: '请输入', trigger: 'blur' }],
+        depositBankAccount: [{ required: true, message: '请输入', trigger: 'blur' }],
+        address: [{ required: true, message: '请输入', trigger: 'blur' }],
+        linkman: [{ required: true, message: '请输入', trigger: 'blur' }],
+        phone: [{ required: true, message: '请输入', trigger: 'blur' }]
       }
     };
   },
@@ -328,8 +358,19 @@ export default {
     this.getDicts("bill_type").then(response => {
       this.billTypeOptions = response.data;
     });
+    this.getDispatching() // 获取所有派遣公司
   },
   methods: {
+    // 获取所有派遣公司
+    getDispatching () {
+      getDispatch().then(response => {
+        this.dispatchOptions = response.data;
+      });
+    },
+    // 派遣公司字典翻译
+    DispatchFormat (row, column) {
+      return selectDispatch(this.dispatchOptions, row.personageOrUnit);
+    },
     /** 查询用工单位信息列表 */
     getList () {
       this.loading = true;
@@ -439,7 +480,11 @@ export default {
               }
             });
           } else {
-            addUnitinfo(this.form).then(response => {
+            const data = {
+              baseUnitinfo: this.form,
+              dispatchingId: this.form.dispatchingId
+            }
+            addUnitinfo(data).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
                 this.open = false;
