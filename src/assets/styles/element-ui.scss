@@ -54,6 +54,51 @@
   margin: 0 auto;
 }
 
+@media screen and (min-width: 768px) {
+  ::-webkit-scrollbar-thumb {
+    height: 32px;
+    background: #d1d1d1;
+    outline-offset: -2px;
+    outline: 2px solid #fff;
+    -webkit-border-radius: 6px;
+    border: 3px solid rgba(245, 247, 249, 1);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #828282;
+    -webkit-border-radius: 6px;
+  }
+  ::-webkit-scrollbar-thumb:active {
+    background: #747474;
+    -webkit-border-radius: 6px;
+  }
+  ::-webkit-scrollbar {
+    width: 13px;
+    height: 13px;
+  }
+  ::-webkit-scrollbar-track-piece {
+    background-color: rgba(255, 255, 255, 0);
+    -webkit-border-radius: 0;
+  }
+}
+/* 重置抽屉和模态框 */
+.el-dialog__wrapper {
+  overflow: visible !important;
+  display: flex;
+  flex-direction: column;
+}
+.el-dialog {
+  margin: auto !important;
+  max-height: 85%;
+}
+.el-dialog__body {
+  max-height: calc(100% - 110px);
+  overflow: auto;
+}
+.el-dialog__footer {
+  height: 110px;
+  text-align: center;
+}
+
 // refine element ui upload
 .upload-container {
   .el-upload {
@@ -69,7 +114,7 @@
 // dropdown
 .el-dropdown-menu {
   a {
-    display: block
+    display: block;
   }
 }
 
