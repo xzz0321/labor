@@ -1,4 +1,4 @@
-<!-- 综合统计查询-客户账单明细 -->
+<!-- 综合统计查询-客户缴费历史 -->
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
@@ -46,9 +46,7 @@
       <el-table-column label="公司名称" align="center" prop="deptId" />
       <el-table-column label="开户银行账号" align="center" prop="nickName" />
       <el-table-column label="地址" align="center" prop="moblephone" />
-      <el-table-column label="实发工资" align="center" prop="salaryNet" />
-      <el-table-column label="工资年份" align="center" prop="wagesYear" />
-      <el-table-column label="工资月份" align="center" prop="wagesMonth" />
+      <el-table-column label="缴费金额" align="center" prop="salaryNet" />
     </el-table>
 
     <pagination
@@ -62,10 +60,10 @@
 </template>
 
 <script>
-import { } from "@/api/synthetical/bill";
+import { } from "@/api/synthetical/history";
 
 export default {
-  name: "bill",
+  name: "history",
   data () {
     return {
       // 遮罩层
@@ -138,16 +136,16 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport () {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有工资管理数据项?', "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(function () {
-        // return exportManage(queryParams);
-      }).then(response => {
-        // this.download(response.msg);
-      }).catch(function () { });
+      // const queryParams = this.queryParams;
+      // this.$confirm('是否确认导出所有工资管理数据项?', "警告", {
+      //   confirmButtonText: "确定",
+      //   cancelButtonText: "取消",
+      //   type: "warning"
+      // }).then(function () {
+      //   return exportManage(queryParams);
+      // }).then(response => {
+      //   this.download(response.msg);
+      // }).catch(function () { });
     }
   }
 };
