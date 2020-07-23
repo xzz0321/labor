@@ -142,7 +142,7 @@
     />
 
     <!-- 添加或修改用工单位信息对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="600px" height="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="150px">
         <el-form-item label="派遣公司" v-if="title == '添加用工单位信息'" prop="dispatchingId">
           <el-select v-model="form.dispatchingId" placeholder="请选择派遣公司">
@@ -480,11 +480,11 @@ export default {
               }
             });
           } else {
-            const data = {
-              baseUnitinfo: this.form,
-              dispatchingId: this.form.dispatchingId
-            }
-            addUnitinfo(data).then(response => {
+            // const data = {
+            //   baseUnitinfo: this.form,
+            //   dispatchingId: this.form.dispatchingId
+            // }
+            addUnitinfo(this.form, { dispatchingId: this.form.dispatchingId }).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
                 this.open = false;

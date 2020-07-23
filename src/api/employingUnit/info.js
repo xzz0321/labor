@@ -18,11 +18,12 @@ export function getUnitinfo (unitId) {
 }
 
 // 新增用工单位信息
-export function addUnitinfo (data) {
+export function addUnitinfo (data, query) {
   return request({
     url: '/business/unitinfo',
     method: 'post',
-    data: data
+    data: data,
+    params: query
   })
 }
 
