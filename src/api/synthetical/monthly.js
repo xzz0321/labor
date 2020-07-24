@@ -2,11 +2,11 @@
 import request from '@/utils/request'
 
 // 查询列表
-export function listMonthly (query) {
+export function listMonthly (data) {
   return request({
     url: '/statistic/info/monthlyList',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: data
   })
 }
 

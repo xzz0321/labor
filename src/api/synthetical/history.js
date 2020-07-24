@@ -2,11 +2,11 @@
 import request from '@/utils/request'
 
 // 查询列表
-export function listHistory (query) {
+export function listHistory (data) {
   return request({
     url: '/statistic/info/historyList',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: data
   })
 }
 

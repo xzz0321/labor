@@ -2,11 +2,11 @@
 import request from '@/utils/request'
 
 // 查询列表
-export function listWorkersIncreas (query) {
+export function listWorkersIncreas (data) {
   return request({
     url: '/statistic/info/providentList',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: data
   })
 }
 

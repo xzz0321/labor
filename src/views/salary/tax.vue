@@ -224,7 +224,7 @@
 import { listTax, getTax, delTax, addTax, updateTax, exportTax } from "@/api/salary/tax";
 
 export default {
-  name: "Tax",
+  name: "tax",
   data () {
     return {
       // 遮罩层

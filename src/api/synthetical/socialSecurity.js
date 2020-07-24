@@ -2,11 +2,11 @@
 import request from '@/utils/request'
 
 // 查询列表
-export function listSocialSecurity (query) {
+export function listSocialSecurity (data) {
   return request({
     url: '/statistic/info/socialSecurityList',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: data
   })
 }
 

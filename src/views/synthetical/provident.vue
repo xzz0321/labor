@@ -2,25 +2,23 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="80px">
-      <el-form-item label="姓名" prop="userId">
+      <el-form-item label="姓名" prop="userName">
         <el-input
-          v-model="queryParams.userId"
+          v-model="queryParams.userName"
           placeholder="请输入姓名"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="公司名称" prop="grantStatus">
-        <el-select v-model="queryParams.grantStatus" placeholder="请选择公司名称" clearable size="small">
-          <el-option label="公司名称" value="公司名称" />
-          <!-- <el-option
-            v-for="dict in grantStatusOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
-          />-->
-        </el-select>
+      <el-form-item label="公司名称" prop="companyName">
+        <el-input
+          v-model="queryParams.companyName"
+          placeholder="请输入公司名称"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -41,14 +39,14 @@
     </el-row>
 
     <el-table v-loading="loading" :data="manageList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="姓名" align="center" prop="userId" />
-      <el-table-column label="公司名称" align="center" prop="deptId" />
-      <el-table-column label="开户银行账号" align="center" prop="nickName" />
-      <el-table-column label="地址" align="center" prop="moblephone" />
-      <el-table-column label="公积金基数" align="center" prop="salaryNet" />
-      <el-table-column label="单位承担" align="center" prop="salaryNet" />
-      <el-table-column label="个人承担" align="center" prop="salaryNet" />
+      <!-- <el-table-column type="selection" width="55" align="center" /> -->
+      <el-table-column label="姓名" align="center" prop="userName" />
+      <el-table-column label="公司名称" align="center" prop="companyName" />
+      <el-table-column label="开户银行账号" align="center" prop="depositBankAccount" />
+      <el-table-column label="地址" align="center" prop="address" />
+      <el-table-column label="公积金基数" align="center" prop="accumulationNumber" />
+      <el-table-column label="单位承担" align="center" prop="accumulationUnit" />
+      <el-table-column label="个人承担" align="center" prop="accumulationPerson" />
     </el-table>
 
     <pagination
@@ -101,11 +99,11 @@ export default {
     /** 查询工资管理列表 */
     getList () {
       this.loading = true;
-      // listProvident(this.queryParams).then(response => {
-      //   this.manageList = response.rows;
-      //   this.total = response.total;
-      this.loading = false;
-      // });
+      listProvident(this.queryParams).then(response => {
+        this.manageList = response.rows;
+        this.total = response.total;
+        this.loading = false;
+      });
     },
     // 发放状态：0已发放 1未发放字典翻译
     grantStatusFormat (row, column) {
@@ -144,9 +142,9 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(function () {
-        // return exportProvident(queryParams);
+        return exportProvident(queryParams);
       }).then(response => {
-        // this.download(response.msg);
+        this.download(response.msg);
       }).catch(function () { });
     }
   }

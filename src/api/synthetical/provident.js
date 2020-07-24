@@ -2,11 +2,11 @@
 import request from '@/utils/request'
 
 // 查询列表
-export function listProvident (query) {
+export function listProvident (data) {
   return request({
     url: '/statistic/info/providentMonthlyList',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: data
   })
 }
 
