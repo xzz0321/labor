@@ -4,7 +4,7 @@ import request from '@/utils/request'
 // 查询缴费记录信息列表
 export function listMessage (query) {
   return request({
-    url: '/pay/record/list',
+    url: '/other/payment/list',
     method: 'get',
     params: query
   })

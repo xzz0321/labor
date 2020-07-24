@@ -1,7 +1,7 @@
 <!-- 个人缴费-其他缴费 -->
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="140px">
+    <!-- <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="140px">
       <el-form-item label="退款状态" prop="refundMessage">
         <el-select v-model="queryParams.refundMessage" placeholder="请选择退款状态" clearable size="small">
           <el-option
@@ -56,19 +56,9 @@
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
-    </el-form>
+    </el-form>-->
     <!-- 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          icon="el-icon-s-finance"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['business:message:remove']"
-        >退款</el-button>
-      </el-col>
       <el-col :span="1.5">
         <el-button
           type="warning"
@@ -81,29 +71,26 @@
     </el-row>-->
 
     <el-table v-loading="loading" :data="messageList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="用户id" align="center" prop="personId" />
+      <!-- <el-table-column type="selection" width="55" align="center" /> -->
+      <el-table-column label="公司名称或个人姓名" align="center" prop="companyName" />
+      <el-table-column label="员工姓名" align="center" prop="personName" />
       <!-- 0是未退款 1是已退款 2是已发起退款 3是已退回 -->
-      <el-table-column label="退款" align="center" prop="refundMessage" />
-      <el-table-column label="用工单位" align="center" prop="employerId" />
-      <el-table-column label="劳务派遣公司" align="center" prop="companyId" />
-      <el-table-column label="缴费方式" align="center" prop="payMethod" />
-      <el-table-column label="缴费金额" align="center" prop="payMoney" />
-      <el-table-column label="社保起始日期" align="center" prop="socialDate" width="180">
+      <el-table-column label="民族" align="center" prop="personNation" />
+      <el-table-column label="联系方式" align="center" prop="personRelation" />
+      <el-table-column label="性别" align="center" prop="personSex" />
+      <el-table-column label="散户或单位" align="center" prop="personageOrUnit">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.socialDate, '{y}-{m}-{d}') }}</span>
+          <span v-if="scope.row.personageOrUnit==2">单位</span>
+          <span v-else>散戶</span>
         </template>
       </el-table-column>
-      <el-table-column label="社保基数" align="center" prop="socialNumber" />
+      <el-table-column label="档案编号" align="center" prop="recordNumber" />
+      <el-table-column label="返款比例" align="center" prop="refundRate" />
+      <el-table-column label="补贴回款" align="center" prop="subsiryMoney" />
       <el-table-column label="养老" align="center" prop="socialOld" />
       <el-table-column label="医疗生育" align="center" prop="socialMedical" />
       <el-table-column label="工伤" align="center" prop="socialInjury" />
       <el-table-column label="失业" align="center" prop="socialUnemployment" />
-      <el-table-column label="公积金起始日期" align="center" prop="accumulationDate" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.accumulationDate, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="公积金基数" align="center" prop="accumulationNumber" />
       <el-table-column label="单位承担" align="center" prop="accumulationUnit" />
       <el-table-column label="个人承担" align="center" prop="accumulationPerson" />
@@ -190,11 +177,11 @@ export default {
     /** 查询缴费记录信息列表 */
     getList () {
       this.loading = true;
-      // listMessage(this.queryParams).then(response => {
-      //   this.messageList = response.rows;
-      //   this.total = response.total;
-      this.loading = false;
-      // });
+      listMessage(this.queryParams).then(response => {
+        this.messageList = response.rows;
+        this.total = response.total;
+        this.loading = false;
+      });
     },
     // 取消按钮
     cancel () {
