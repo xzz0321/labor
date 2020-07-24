@@ -2,18 +2,18 @@
 import request from '@/utils/request'
 
 // 查询列表
-export function listBill (query) {
+export function listBill (data) {
   return request({
-    url: '/statistic/info/arrearsList',
-    method: 'get',
-    params: query
+    url: '/statistic/info/customerList',
+    method: 'post',
+    data: data
   })
 }
 
 // 导出
 export function exportBill (query) {
   return request({
-    url: '/statistic/info/arrearsExport',
+    url: '/statistic/info/customerExport',
     method: 'get',
     params: query
   })

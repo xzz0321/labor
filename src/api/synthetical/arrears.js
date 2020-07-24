@@ -2,11 +2,11 @@
 import request from '@/utils/request'
 
 // 查询列表
-export function listArrears (query) {
+export function listArrears (data) {
   return request({
     url: '/statistic/info/arrearsList',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: data
   })
 }
 
