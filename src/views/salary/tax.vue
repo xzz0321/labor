@@ -37,34 +37,23 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="应发工资" prop="salaryPayable">
+      <el-form-item label="税前工资" prop="grossPay">
         <el-input
-          v-model="queryParams.salaryPayable"
-          placeholder="请输入应发工资"
+          v-model="queryParams.grossPay"
+          placeholder="请输入税前工资"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="实发工资" prop="salaryNet">
+      <el-form-item label="税后工资" prop="afterTaxWages">
         <el-input
-          v-model="queryParams.salaryNet"
-          placeholder="请输入实发工资"
+          v-model="queryParams.afterTaxWages"
+          placeholder="请输入税后工资"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
-      <!-- ：0已发放 1未发放 -->
-      <el-form-item label="发放状态" prop="grantStatus">
-        <el-select v-model="queryParams.grantStatus" placeholder="请选择发放状态" clearable size="small">
-          <el-option
-            v-for="dict in grantStatusOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
-          />
-        </el-select>
       </el-form-item>
       <el-form-item label="工资年份" prop="wagesYear">
         <el-input
@@ -84,7 +73,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <!-- ：0正常 1停用 -->
       <el-form-item label="状态" prop="state">
         <el-select v-model="queryParams.state" placeholder="请选择状态" clearable size="small">
           <el-option
@@ -108,7 +96,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['business:manage:add']"
+          v-hasPermi="['business:tax:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -118,7 +106,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['business:manage:edit']"
+          v-hasPermi="['business:tax:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -128,7 +116,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['business:manage:remove']"
+          v-hasPermi="['business:tax:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -137,31 +125,23 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['business:manage:export']"
+          v-hasPermi="['business:tax:export']"
         >导出</el-button>
       </el-col>
     </el-row>
 
-    <el-table v-loading="loading" :data="manageList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="taxList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <!-- <el-table-column label="主键id" align="center" prop="id" /> -->
+      <el-table-column label="主键id" align="center" prop="id" />
       <el-table-column label="用户id" align="center" prop="userId" />
       <el-table-column label="用户昵称" align="center" prop="nickName" />
       <el-table-column label="手机号" align="center" prop="moblephone" />
       <el-table-column label="客户单位" align="center" prop="clientUnit" />
-      <el-table-column label="应发工资" align="center" prop="salaryPayable" />
-      <el-table-column label="实发工资" align="center" prop="salaryNet" />
-      <!-- ：0已发放 1未发放 -->
-      <el-table-column
-        label="发放状态"
-        align="center"
-        prop="grantStatus"
-        :formatter="grantStatusFormat"
-      />
+      <el-table-column label="税前工资" align="center" prop="grossPay" />
+      <el-table-column label="税后工资" align="center" prop="afterTaxWages" />
       <el-table-column label="工资年份" align="center" prop="wagesYear" />
       <el-table-column label="工资月份" align="center" prop="wagesMonth" />
-      <!-- <el-table-column label="备注" align="center" prop="remark" /> -->
-      <!-- ：0正常 1停用 -->
+      <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="状态" align="center" prop="state" :formatter="stateFormat" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -170,14 +150,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['business:manage:edit']"
+            v-hasPermi="['business:tax:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['business:manage:remove']"
+            v-hasPermi="['business:tax:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -191,7 +171,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改工资管理对话框 -->
+    <!-- 添加或修改工资交税管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="用户id" prop="userId">
@@ -206,22 +186,11 @@
         <el-form-item label="客户单位" prop="clientUnit">
           <el-input v-model="form.clientUnit" placeholder="请输入客户单位" />
         </el-form-item>
-        <el-form-item label="应发工资" prop="salaryPayable">
-          <el-input v-model="form.salaryPayable" placeholder="请输入应发工资" />
+        <el-form-item label="税前工资" prop="grossPay">
+          <el-input v-model="form.grossPay" placeholder="请输入税前工资" />
         </el-form-item>
-        <el-form-item label="实发工资" prop="salaryNet">
-          <el-input v-model="form.salaryNet" placeholder="请输入实发工资" />
-        </el-form-item>
-        <!-- ：0已发放 1未发放 -->
-        <el-form-item label="发放状态">
-          <el-select v-model="form.grantStatus" placeholder="请选择发放状态">
-            <el-option
-              v-for="dict in grantStatusOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
-            ></el-option>
-          </el-select>
+        <el-form-item label="税后工资" prop="afterTaxWages">
+          <el-input v-model="form.afterTaxWages" placeholder="请输入税后工资" />
         </el-form-item>
         <el-form-item label="工资年份" prop="wagesYear">
           <el-input v-model="form.wagesYear" placeholder="请输入工资年份" />
@@ -232,7 +201,6 @@
         <el-form-item label="删除标记" prop="delFlag">
           <el-input v-model="form.delFlag" placeholder="请输入删除标记" />
         </el-form-item>
-        <!-- ：0正常 1停用 -->
         <el-form-item label="状态">
           <el-select v-model="form.state" placeholder="请选择状态">
             <el-option
@@ -253,10 +221,10 @@
 </template>
 
 <script>
-import { listManage, getManage, delManage, addManage, updateManage, exportManage } from "@/api/salary/index";
+import { listTax, getTax, delTax, addTax, updateTax, exportTax } from "@/api/salary/tax";
 
 export default {
-  name: "salary",
+  name: "Tax",
   data () {
     return {
       // 遮罩层
@@ -269,15 +237,13 @@ export default {
       multiple: true,
       // 总条数
       total: 0,
-      // 工资管理表格数据
-      manageList: [],
+      // 工资交税管理表格数据
+      taxList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
-      // 发放状态：0已发放 1未发放字典
-      grantStatusOptions: [],
-      // 状态：0正常 1停用字典
+      // 状态字典
       stateOptions: [],
       // 查询参数
       queryParams: {
@@ -287,9 +253,8 @@ export default {
         nickName: undefined,
         moblephone: undefined,
         clientUnit: undefined,
-        salaryPayable: undefined,
-        salaryNet: undefined,
-        grantStatus: undefined,
+        grossPay: undefined,
+        afterTaxWages: undefined,
         wagesYear: undefined,
         wagesMonth: undefined,
         state: undefined
@@ -303,28 +268,21 @@ export default {
   },
   created () {
     this.getList();
-    this.getDicts("grant_status").then(response => {
-      this.grantStatusOptions = response.data;
-    });
-    this.getDicts("sys_job_status").then(response => {
+    this.getDicts("sys_notice_status").then(response => {
       this.stateOptions = response.data;
     });
   },
   methods: {
-    /** 查询工资管理列表 */
+    /** 查询工资交税管理列表 */
     getList () {
       this.loading = true;
-      listManage(this.queryParams).then(response => {
-        this.manageList = response.rows;
+      listTax(this.queryParams).then(response => {
+        this.taxList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
     },
-    // 发放状态：0已发放 1未发放字典翻译
-    grantStatusFormat (row, column) {
-      return this.selectDictLabel(this.grantStatusOptions, row.grantStatus);
-    },
-    // 状态：0正常 1停用字典翻译
+    // 状态字典翻译
     stateFormat (row, column) {
       return this.selectDictLabel(this.stateOptions, row.state);
     },
@@ -341,9 +299,8 @@ export default {
         nickName: undefined,
         moblephone: undefined,
         clientUnit: undefined,
-        salaryPayable: undefined,
-        salaryNet: undefined,
-        grantStatus: undefined,
+        grossPay: undefined,
+        afterTaxWages: undefined,
         wagesYear: undefined,
         wagesMonth: undefined,
         createTime: undefined,
@@ -376,16 +333,16 @@ export default {
     handleAdd () {
       this.reset();
       this.open = true;
-      this.title = "添加工资管理";
+      this.title = "添加工资交税管理";
     },
     /** 修改按钮操作 */
     handleUpdate (row) {
       this.reset();
       const id = row.id || this.ids
-      getManage(id).then(response => {
+      getTax(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改工资管理";
+        this.title = "修改工资交税管理";
       });
     },
     /** 提交按钮 */
@@ -393,7 +350,7 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {
-            updateManage(this.form).then(response => {
+            updateTax(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
                 this.open = false;
@@ -401,7 +358,7 @@ export default {
               }
             });
           } else {
-            addManage(this.form).then(response => {
+            addTax(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
                 this.open = false;
@@ -415,12 +372,12 @@ export default {
     /** 删除按钮操作 */
     handleDelete (row) {
       const ids = row.id || this.ids;
-      this.$confirm('是否确认删除工资管理编号为"' + ids + '"的数据项?', "警告", {
+      this.$confirm('是否确认删除工资交税管理编号为"' + ids + '"的数据项?', "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       }).then(function () {
-        return delManage(ids);
+        return delTax(ids);
       }).then(() => {
         this.getList();
         this.msgSuccess("删除成功");
@@ -429,12 +386,12 @@ export default {
     /** 导出按钮操作 */
     handleExport () {
       const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有工资管理数据项?', "警告", {
+      this.$confirm('是否确认导出所有工资交税管理数据项?', "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       }).then(function () {
-        return exportManage(queryParams);
+        return exportTax(queryParams);
       }).then(response => {
         this.download(response.msg);
       }).catch(function () { });
