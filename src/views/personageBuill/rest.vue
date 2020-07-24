@@ -1,7 +1,7 @@
-<!-- 个人缴费-财务-退款管理 -->
+<!-- 个人缴费-其他缴费 -->
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="110px">
+    <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="140px">
       <el-form-item label="退款状态" prop="refundMessage">
         <el-select v-model="queryParams.refundMessage" placeholder="请选择退款状态" clearable size="small">
           <el-option
@@ -13,26 +13,24 @@
         </el-select>
       </el-form-item>
       <el-form-item label="用工单位" prop="employerId">
-        <el-select v-model="queryParams.employerId" placeholder="请选择用工单位" clearable size="small">
-          <el-option
-            v-for="dict in employeeOptions"
-            :key="dict.companyNumber"
-            :label="dict.companyName"
-            :value="dict.companyNumber"
-          />
-        </el-select>
+        <el-input
+          v-model="queryParams.employerId"
+          placeholder="请输入用工单位"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
       <el-form-item label="劳务派遣公司" prop="companyId">
-        <el-select v-model="queryParams.companyId" placeholder="请选择劳务派遣公司" clearable size="small">
-          <el-option
-            v-for="dict in dispatchOptions"
-            :key="dict.dispatchingId"
-            :label="dict.companyName"
-            :value="dict.dispatchingId"
-          />
-        </el-select>
+        <el-input
+          v-model="queryParams.companyId"
+          placeholder="请输入劳务派遣公司"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
-      <!-- <el-form-item label="社保起始日期" prop="socialDate">
+      <el-form-item label="社保起始日期" prop="socialDate">
         <el-date-picker
           clearable
           size="small"
@@ -53,13 +51,13 @@
           value-format="yyyy-MM-dd"
           placeholder="选择公积金起始日期"
         ></el-date-picker>
-      </el-form-item>-->
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
-
+    <!-- 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
@@ -80,30 +78,18 @@
           v-hasPermi="['business:message:export']"
         >导出</el-button>
       </el-col>
-    </el-row>
+    </el-row>-->
 
     <el-table v-loading="loading" :data="messageList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="用户id" align="center" prop="personId" />
       <!-- 0是未退款 1是已退款 2是已发起退款 3是已退回 -->
-      <el-table-column
-        label="退款状态"
-        align="center"
-        prop="refundMessage"
-        :formatter="DispatchMessage"
-        width="100"
-      />
-      <el-table-column label="用工单位" align="center" prop="employerId" :formatter="DispatchEmployee" />
-      <el-table-column
-        label="劳务派遣公司"
-        align="center"
-        prop="companyId"
-        width="120"
-        :formatter="Dispatch"
-      />
+      <el-table-column label="退款" align="center" prop="refundMessage" />
+      <el-table-column label="用工单位" align="center" prop="employerId" />
+      <el-table-column label="劳务派遣公司" align="center" prop="companyId" />
       <el-table-column label="缴费方式" align="center" prop="payMethod" />
       <el-table-column label="缴费金额" align="center" prop="payMoney" />
-      <el-table-column label="社保起始日期" align="center" prop="socialDate" width="100">
+      <el-table-column label="社保起始日期" align="center" prop="socialDate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.socialDate, '{y}-{m}-{d}') }}</span>
         </template>
@@ -113,25 +99,26 @@
       <el-table-column label="医疗生育" align="center" prop="socialMedical" />
       <el-table-column label="工伤" align="center" prop="socialInjury" />
       <el-table-column label="失业" align="center" prop="socialUnemployment" />
-      <el-table-column label="公积金起始日期" align="center" prop="accumulationDate" width="120">
+      <el-table-column label="公积金起始日期" align="center" prop="accumulationDate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.accumulationDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="公积金基数" align="center" prop="accumulationNumber" width="100" />
+      <el-table-column label="公积金基数" align="center" prop="accumulationNumber" />
       <el-table-column label="单位承担" align="center" prop="accumulationUnit" />
       <el-table-column label="个人承担" align="center" prop="accumulationPerson" />
+      <!-- <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-edit"
+            icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['business:message:remove']"
           >退款</el-button>
         </template>
-      </el-table-column>
+      </el-table-column>-->
     </el-table>
 
     <pagination
@@ -145,10 +132,10 @@
 </template>
 
 <script>
-import { listMessage, delMessage, exportMessage, selectMessage, getDispatch, selectDispatch, getEmployee, selectEmployee } from "@/api/personageBuill/refund";
+import { listMessage, exportMessage } from "@/api/personageBuill/rest";
 
 export default {
-  name: "refund",
+  name: "rest",
   data () {
     return {
       // 遮罩层
@@ -193,43 +180,21 @@ export default {
         { name: '已退款', value: 1, dictSort: 1 },
         { name: '已发起退款', value: 2, dictSort: 2 },
         { name: '已退回', value: 3, dictSort: 3 }
-      ],
-      // 派遣单位
-      dispatchOptions: [],
-      // 用工单位
-      employeeOptions: []
+      ]
     };
   },
   created () {
     this.getList();
-    getDispatch().then(response => {
-      this.dispatchOptions = response.rows;
-    });
-    getEmployee().then(response => {
-      this.employeeOptions = response.rows;
-    });
   },
   methods: {
-    // 退款字典翻译
-    DispatchMessage (row, column) {
-      return selectMessage(this.refundMessageArr, row.refundMessage);
-    },
-    // 派遣单位字典翻译
-    Dispatch (row, column) {
-      return selectDispatch(this.dispatchOptions, row.companyId);
-    },
-    // 用工单位字典翻译
-    DispatchEmployee (row, column) {
-      return selectEmployee(this.employeeOptions, row.employerId);
-    },
     /** 查询缴费记录信息列表 */
     getList () {
       this.loading = true;
-      listMessage(this.queryParams).then(response => {
-        this.messageList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+      // listMessage(this.queryParams).then(response => {
+      //   this.messageList = response.rows;
+      //   this.total = response.total;
+      this.loading = false;
+      // });
     },
     // 取消按钮
     cancel () {
@@ -280,37 +245,19 @@ export default {
       this.single = selection.length != 1
       this.multiple = !selection.length
     },
-    /** 删除按钮操作 */
-    handleDelete (row) {
-      const ids = row.id || this.ids;
-      this.$confirm('是否确认退款信息编号为"' + ids + '"的数据项?', "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(function () {
-        const data = {
-          recordId: [...ids],
-          refundMessage: 2
-        }
-        return delMessage(data);
-      }).then(() => {
-        this.getList();
-        this.msgSuccess("退款成功");
-      }).catch(function () { });
-    },
-    /** 导出按钮操作 */
-    handleExport () {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有缴费记录信息数据项?', "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(function () {
-        return exportMessage(queryParams);
-      }).then(response => {
-        this.download(response.msg);
-      }).catch(function () { });
-    }
+    // /** 导出按钮操作 */
+    // handleExport () {
+    //   const queryParams = this.queryParams;
+    //   this.$confirm('是否确认导出所有缴费记录信息数据项?', "警告", {
+    //     confirmButtonText: "确定",
+    //     cancelButtonText: "取消",
+    //     type: "warning"
+    //   }).then(function () {
+    //     return exportMessage(queryParams);
+    //   }).then(response => {
+    //     this.download(response.msg);
+    //   }).catch(function () { });
+    // }
   }
 };
 </script>

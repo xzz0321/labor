@@ -1,4 +1,4 @@
-<!-- 个人缴费-财务-退款管理 -->
+<!-- 个人缴费-人事-退款查询 -->
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="110px">
@@ -61,7 +61,7 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
+      <!-- <el-col :span="1.5">
         <el-button
           type="primary"
           icon="el-icon-s-finance"
@@ -70,7 +70,7 @@
           @click="handleDelete"
           v-hasPermi="['business:message:remove']"
         >退款</el-button>
-      </el-col>
+      </el-col>-->
       <el-col :span="1.5">
         <el-button
           type="warning"
@@ -121,17 +121,6 @@
       <el-table-column label="公积金基数" align="center" prop="accumulationNumber" width="100" />
       <el-table-column label="单位承担" align="center" prop="accumulationUnit" />
       <el-table-column label="个人承担" align="center" prop="accumulationPerson" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['business:message:remove']"
-          >退款</el-button>
-        </template>
-      </el-table-column>
     </el-table>
 
     <pagination
@@ -145,10 +134,10 @@
 </template>
 
 <script>
-import { listMessage, delMessage, exportMessage, selectMessage, getDispatch, selectDispatch, getEmployee, selectEmployee } from "@/api/personageBuill/refund";
+import { listMessage, exportMessage, selectMessage, getDispatch, selectDispatch, getEmployee, selectEmployee } from "@/api/personageBuill/refund";
 
 export default {
-  name: "refund",
+  name: "refundList",
   data () {
     return {
       // 遮罩层
@@ -280,24 +269,24 @@ export default {
       this.single = selection.length != 1
       this.multiple = !selection.length
     },
-    /** 删除按钮操作 */
-    handleDelete (row) {
-      const ids = row.id || this.ids;
-      this.$confirm('是否确认退款信息编号为"' + ids + '"的数据项?', "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(function () {
-        const data = {
-          recordId: [...ids],
-          refundMessage: 2
-        }
-        return delMessage(data);
-      }).then(() => {
-        this.getList();
-        this.msgSuccess("退款成功");
-      }).catch(function () { });
-    },
+    // /** 删除按钮操作 */
+    // handleDelete (row) {
+    //   const ids = row.id || this.ids;
+    //   this.$confirm('是否确认退款信息编号为"' + ids + '"的数据项?', "警告", {
+    //     confirmButtonText: "确定",
+    //     cancelButtonText: "取消",
+    //     type: "warning"
+    //   }).then(function () {
+    //     const data = {
+    //       recordId: [...ids],
+    //       refundMessage: 2
+    //     }
+    //     return delMessage(data);
+    //   }).then(() => {
+    //     this.getList();
+    //     this.msgSuccess("退款成功");
+    //   }).catch(function () { });
+    // },
     /** 导出按钮操作 */
     handleExport () {
       const queryParams = this.queryParams;

@@ -1,8 +1,8 @@
-<!-- 个人缴费-财务-退款管理 -->
+<!-- 个人缴费-人事-退款审核 -->
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="110px">
-      <el-form-item label="退款状态" prop="refundMessage">
+      <!-- <el-form-item label="退款状态" prop="refundMessage">
         <el-select v-model="queryParams.refundMessage" placeholder="请选择退款状态" clearable size="small">
           <el-option
             v-for="dict in refundMessageArr"
@@ -11,7 +11,7 @@
             :value="dict.value"
           />
         </el-select>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item label="用工单位" prop="employerId">
         <el-select v-model="queryParams.employerId" placeholder="请选择用工单位" clearable size="small">
           <el-option
@@ -32,28 +32,6 @@
           />
         </el-select>
       </el-form-item>
-      <!-- <el-form-item label="社保起始日期" prop="socialDate">
-        <el-date-picker
-          clearable
-          size="small"
-          style="width: 200px"
-          v-model="queryParams.socialDate"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="选择社保起始日期"
-        ></el-date-picker>
-      </el-form-item>
-      <el-form-item label="公积金起始日期" prop="accumulationDate">
-        <el-date-picker
-          clearable
-          size="small"
-          style="width: 200px"
-          v-model="queryParams.accumulationDate"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="选择公积金起始日期"
-        ></el-date-picker>
-      </el-form-item>-->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -64,12 +42,12 @@
       <el-col :span="1.5">
         <el-button
           type="primary"
-          icon="el-icon-s-finance"
+          icon="el-icon-edit"
           size="mini"
           :disabled="multiple"
-          @click="handleDelete"
+          @click="updateStatus"
           v-hasPermi="['business:message:remove']"
-        >退款</el-button>
+        >审核</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -127,9 +105,9 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
-            @click="handleDelete(scope.row)"
+            @click="updateStatus(scope.row)"
             v-hasPermi="['business:message:remove']"
-          >退款</el-button>
+          >审核</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -141,6 +119,22 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+
+    <!-- 审核 -->
+    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="150px">
+        <el-form-item label="是否同意退款" prop="refundMessage">
+          <el-radio-group v-model="form.refundMessage">
+            <el-radio :label="1">同意</el-radio>
+            <el-radio :label="3">不同意</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -148,7 +142,7 @@
 import { listMessage, delMessage, exportMessage, selectMessage, getDispatch, selectDispatch, getEmployee, selectEmployee } from "@/api/personageBuill/refund";
 
 export default {
-  name: "refund",
+  name: "refundAudit",
   data () {
     return {
       // 遮罩层
@@ -164,7 +158,7 @@ export default {
       // 缴费记录信息表格数据
       messageList: [],
       // 弹出层标题
-      title: "",
+      title: "退款审核",
       // 是否显示弹出层
       open: false,
       // 查询参数
@@ -172,7 +166,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         personId: undefined,
-        refundMessage: undefined,
+        refundMessage: 2,
         employerId: undefined,
         companyId: undefined,
         payMoney: undefined,
@@ -197,7 +191,14 @@ export default {
       // 派遣单位
       dispatchOptions: [],
       // 用工单位
-      employeeOptions: []
+      employeeOptions: [],
+      row: undefined,
+      form: {
+        refundMessage: undefined
+      },
+      rules: {
+        refundMessage: [{ required: true, message: '请选择', trigger: 'blur' }]
+      }
     };
   },
   created () {
@@ -241,7 +242,7 @@ export default {
       this.form = {
         id: undefined,
         personId: undefined,
-        refundMessage: undefined,
+        refundMessage: 2,
         employerId: undefined,
         companyId: undefined,
         payMoney: undefined,
@@ -280,23 +281,33 @@ export default {
       this.single = selection.length != 1
       this.multiple = !selection.length
     },
-    /** 删除按钮操作 */
-    handleDelete (row) {
-      const ids = row.id || this.ids;
-      this.$confirm('是否确认退款信息编号为"' + ids + '"的数据项?', "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(function () {
-        const data = {
-          recordId: [...ids],
-          refundMessage: 2
+    // 退款审核
+    updateStatus (row) {
+      this.open = true;
+      this.row = row;
+    },
+    // 确定审核
+    submitForm () {
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          const ids = this.row.id || this.ids;
+          const data = {
+            recordId: [...ids],
+            refundMessage: this.form.refundMessage
+          }
+          this.$confirm('是否确认审核编号为"' + ids + '"的数据项?', "警告", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning"
+          }).then(function () {
+            return delMessage(data);
+          }).then(() => {
+            this.getList();
+            this.open = false;
+            this.msgSuccess("审核成功");
+          }).catch(function () { });
         }
-        return delMessage(data);
-      }).then(() => {
-        this.getList();
-        this.msgSuccess("退款成功");
-      }).catch(function () { });
+      });
     },
     /** 导出按钮操作 */
     handleExport () {

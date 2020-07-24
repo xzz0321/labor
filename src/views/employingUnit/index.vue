@@ -323,6 +323,7 @@ export default {
       unitTypeOptions: [],
       // 派遣公司
       dispatchOptions: [],
+      billTypeOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
