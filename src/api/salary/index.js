@@ -59,3 +59,15 @@ export function getUser () {
     method: 'post',
   })
 }
+
+// 回显员工信息
+export function selectUser (datas, value) {
+  var actions = [];
+  Object.keys(datas).map((key) => {
+    if (datas[key].id == ('' + value)) {
+      actions.push(datas[key].personName);
+      return false;
+    }
+  })
+  return actions.join('');
+}

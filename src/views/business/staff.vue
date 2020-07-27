@@ -83,14 +83,14 @@
         label="劳务派遣公司"
         align="center"
         prop="companyId"
-        width="120"
+        width="120px"
         :formatter="Dispatch"
       />
       <el-table-column label="用工单位" align="center" prop="employerId" :formatter="DispatchEmployee" />
       <el-table-column label="员工姓名" align="center" prop="personName" />
       <!-- 0是未退款 1是已退款 2是已发起退款 3是已退回 -->
       <el-table-column label="民族" align="center" prop="personNation" />
-      <el-table-column label="联系方式" align="center" prop="personRelation" />
+      <el-table-column label="联系方式" align="center" prop="personRelation" width="110px" />
       <el-table-column label="性别" align="center" prop="personSex" />
       <!-- <el-table-column label="散户或单位" align="center" prop="personageOrUnit">
         <template slot-scope="scope">
@@ -108,7 +108,12 @@
       <el-table-column label="公积金基数" align="center" prop="accumulationNumber" />
       <el-table-column label="单位承担" align="center" prop="accumulationUnit" />
       <el-table-column label="个人承担" align="center" prop="accumulationPerson" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column
+        label="操作"
+        align="center"
+        class-name="small-padding fixed-width"
+        width="140px"
+      >
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -145,13 +150,13 @@
             placeholder="请选择派遣公司"
             clearable
             size="small"
-            @blur="getEmployeeOptions(uploadForm.companyId)"
+            @change="getEmployeeOptions(form.companyId)"
           >
             <el-option
               v-for="dict in dispatchOptions"
-              :key="dict.companyNumber"
+              :key="dict.dispatchingId"
               :label="dict.companyName"
-              :value="dict.companyNumber"
+              :value="dict.dispatchingId"
             />
           </el-select>
         </el-form-item>
@@ -159,9 +164,9 @@
           <el-select v-model="form.employerId" placeholder="请选择用工单位" clearable size="small">
             <el-option
               v-for="dict in employeeOptions"
-              :key="dict.companyNumber"
+              :key="dict.unitId"
               :label="dict.companyName"
-              :value="dict.companyNumber"
+              :value="dict.unitId"
             />
           </el-select>
         </el-form-item>
@@ -239,13 +244,13 @@
             placeholder="请选择派遣公司"
             clearable
             size="small"
-            @blur="getEmployeeOptions(uploadForm.companyId)"
+            @change="getEmployeeOptions(uploadForm.companyId)"
           >
             <el-option
               v-for="dict in dispatchOptions"
-              :key="dict.companyNumber"
+              :key="dict.unitId"
               :label="dict.companyName"
-              :value="dict.companyNumber"
+              :value="dict.unitId"
             />
           </el-select>
         </el-form-item>
@@ -384,6 +389,7 @@ export default {
   methods: {
     // 获取用工单位
     getEmployeeOptions (id) {
+      console.log(id)
       getEmployee({ companyId: id }).then(response => {
         this.employeeOptions = response.rows;
       });

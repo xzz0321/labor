@@ -73,7 +73,7 @@ export function selectDispatch (datas, value) {
 export function selectEmployee (datas, value) {
   var actions = [];
   Object.keys(datas).map((key) => {
-    if (datas[key].companyNumber == ('' + value)) {
+    if (datas[key].unitId == ('' + value)) {
       actions.push(datas[key].companyName);
       return false;
     }
