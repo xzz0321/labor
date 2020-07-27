@@ -28,7 +28,7 @@
           v-hasPermi="['business:info:add']"
         >新增</el-button>
       </el-col>
-      <el-col :span="1.5">
+      <!-- <el-col :span="1.5">
         <el-button
           type="success"
           icon="el-icon-edit"
@@ -37,7 +37,7 @@
           @click="handleUpdate"
           v-hasPermi="['business:info:edit']"
         >修改</el-button>
-      </el-col>
+      </el-col>-->
       <el-col :span="1.5">
         <el-button
           type="danger"
@@ -79,7 +79,8 @@
 
     <el-table v-loading="loading" :data="infoList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="用工单位" align="center" prop="employerId" :formatter="DispatchEmployee" />
+      <!-- <el-table-column label="用工单位" align="center" prop="employerId" :formatter="DispatchEmployee" /> -->
+      <el-table-column label="用工单位" align="center" prop="companyName"/>
       <el-table-column
         label="劳务派遣公司"
         align="center"
@@ -92,12 +93,12 @@
       <el-table-column label="民族" align="center" prop="personNation" />
       <el-table-column label="联系方式" align="center" prop="personRelation" />
       <el-table-column label="性别" align="center" prop="personSex" />
-      <el-table-column label="散户或单位" align="center" prop="personageOrUnit">
+      <!-- <el-table-column label="散户或单位" align="center" prop="personageOrUnit">
         <template slot-scope="scope">
           <span v-if="scope.row.personageOrUnit==2">单位</span>
           <span v-else>散戶</span>
         </template>
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column label="档案编号" align="center" prop="recordNumber" />
       <el-table-column label="返款比例" align="center" prop="refundRate" />
       <el-table-column label="补贴回款" align="center" prop="subsiryMoney" />
@@ -171,7 +172,7 @@
         <el-form-item label="性别" prop="personSex">
           <el-input v-model="form.personSex" placeholder="请输入性别" />
         </el-form-item>
-        <el-form-item label="散户或单位" prop="personageOrUnit">
+        <!-- <el-form-item label="散户或单位" prop="personageOrUnit">
           <el-select v-model="form.personageOrUnit" placeholder="请选择散户或单位">
             <el-option
               v-for="dict in personageOrUnitOptions"
@@ -180,7 +181,7 @@
               :value="dict.dictValue"
             ></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="档案编号" prop="recordNumber">
           <el-input v-model="form.recordNumber" placeholder="请输入档案编号" />
         </el-form-item>
@@ -434,7 +435,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange (selection) {
-      this.ids = selection.map(item => item.dispatchingId)
+      this.ids = selection.map(item => item.id)
       this.single = selection.length != 1
       this.multiple = !selection.length
     },
@@ -447,22 +448,17 @@ export default {
     /** 修改按钮操作 */
     handleUpdate (row) {
       this.reset();
-      const dispatchingId = row.dispatchingId || this.ids
-      getInfo(dispatchingId).then(response => {
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改派遣公司人员名单";
-      });
+      // const dispatchingId = row.id || this.ids
+      this.form = row;
+      this.open = true;
+      this.title = "修改派遣公司人员名单";
     },
     /** 提交按钮 */
     submitForm: function () {
-      const data = {
-        personBaseInfo: this.form
-      }
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.dispatchingId != undefined) {
-            updateInfo(data).then(response => {
+          if (this.form.id != undefined) {
+            updateInfo(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
                 this.open = false;
@@ -470,7 +466,7 @@ export default {
               }
             });
           } else {
-            addInfo(data).then(response => {
+            addInfo(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
                 this.open = false;
@@ -515,7 +511,7 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete (row) {
-      const dispatchingIds = row.dispatchingId || this.ids;
+      const dispatchingIds = row.id || this.ids;
       this.$confirm('是否确认删除派遣公司单位信息编号为"' + dispatchingIds + '"的数据项?', "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
