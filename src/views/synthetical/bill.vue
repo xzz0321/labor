@@ -12,13 +12,14 @@
         />
       </el-form-item>
       <el-form-item label="公司名称" prop="companyName">
-        <el-input
-          v-model="queryParams.companyName"
-          placeholder="请输入公司名称"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.companyName" placeholder="请选择派遣公司" clearable size="small">
+          <el-option
+            v-for="dict in dispatchOptions"
+            :key="dict.companyName"
+            :label="dict.companyName"
+            :value="dict.companyName"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -61,6 +62,7 @@
 
 <script>
 import { listBill, exportBill } from "@/api/synthetical/bill";
+import { getDispatch } from "@/api/business/staff";
 
 export default {
   name: "bill",
@@ -86,14 +88,16 @@ export default {
         pageSize: 10,
         userId: undefined,
         grantStatus: undefined,
-      }
+      },
+      // 派遣公司
+      dispatchOptions: []
     };
   },
   created () {
     this.getList();
-    // this.getDicts("grant_status").then(response => {
-    //   this.grantStatusOptions = response.data;
-    // });
+    getDispatch().then(response => {
+      this.dispatchOptions = response.rows;
+    });
   },
   methods: {
     /** 查询工资管理列表 */

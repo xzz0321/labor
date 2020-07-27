@@ -60,6 +60,7 @@
 
 <script>
 import { listArrears, exportArrears } from "@/api/synthetical/arrears";
+import { getDispatch } from "@/api/business/staff";
 
 export default {
   name: "arrears",
@@ -85,14 +86,16 @@ export default {
         pageSize: 10,
         userId: undefined,
         grantStatus: undefined,
-      }
+      },
+      // 派遣公司
+      dispatchOptions: []
     };
   },
   created () {
     this.getList();
-    // this.getDicts("grant_status").then(response => {
-    //   this.grantStatusOptions = response.data;
-    // });
+    getDispatch().then(response => {
+      this.dispatchOptions = response.rows;
+    });
   },
   methods: {
     /** 查询工资管理列表 */
