@@ -206,7 +206,7 @@ export default {
     getDispatch().then(response => {
       this.dispatchOptions = response.rows;
     });
-    getEmployee().then(response => {
+    getEmployee({}).then(response => {
       this.employeeOptions = response.rows;
     });
   },

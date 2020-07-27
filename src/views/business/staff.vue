@@ -86,7 +86,7 @@
         width="120"
         :formatter="Dispatch"
       />
-      <el-table-column label="用工单位" align="center" prop="companyName" />
+      <el-table-column label="用工单位" align="center" prop="employerId" :formatter="DispatchEmployee" />
       <el-table-column label="员工姓名" align="center" prop="personName" />
       <!-- 0是未退款 1是已退款 2是已发起退款 3是已退回 -->
       <el-table-column label="民族" align="center" prop="personNation" />
@@ -377,14 +377,14 @@ export default {
     getDispatch().then(response => {
       this.dispatchOptions = response.rows;
     });
-    this.getDicts("personage_unit").then(response => {
-      this.personageOrUnitOptions = response.data;
+    getEmployee({}).then(response => {
+      this.employeeOptions = response.rows;
     });
   },
   methods: {
     // 获取用工单位
     getEmployeeOptions (id) {
-      getEmployee(id).then(response => {
+      getEmployee({ companyId: id }).then(response => {
         this.employeeOptions = response.rows;
       });
     },

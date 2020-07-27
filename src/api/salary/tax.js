@@ -1,16 +1,16 @@
 import request from '@/utils/request'
 
 // 查询工资交税管理列表
-export function listTax(query) {
+export function listTax (data) {
   return request({
     url: '/business/tax/list',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: data
   })
 }
 
 // 查询工资交税管理详细
-export function getTax(id) {
+export function getTax (id) {
   return request({
     url: '/business/tax/' + id,
     method: 'get'
@@ -18,7 +18,7 @@ export function getTax(id) {
 }
 
 // 新增工资交税管理
-export function addTax(data) {
+export function addTax (data) {
   return request({
     url: '/business/tax',
     method: 'post',
@@ -27,7 +27,7 @@ export function addTax(data) {
 }
 
 // 修改工资交税管理
-export function updateTax(data) {
+export function updateTax (data) {
   return request({
     url: '/business/tax',
     method: 'put',
@@ -36,7 +36,7 @@ export function updateTax(data) {
 }
 
 // 删除工资交税管理
-export function delTax(id) {
+export function delTax (id) {
   return request({
     url: '/business/tax/' + id,
     method: 'delete'
@@ -44,7 +44,7 @@ export function delTax(id) {
 }
 
 // 导出工资交税管理
-export function exportTax(query) {
+export function exportTax (query) {
   return request({
     url: '/business/tax/export',
     method: 'get',

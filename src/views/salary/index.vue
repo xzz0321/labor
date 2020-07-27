@@ -1,23 +1,15 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="用户id" prop="userId">
-        <el-input
-          v-model="queryParams.userId"
-          placeholder="请输入用户id"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="用户昵称" prop="nickName">
-        <el-input
-          v-model="queryParams.nickName"
-          placeholder="请输入用户昵称"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+      <el-form-item label="用户昵称" :prop="title=='修改工资交税管理'? '': userId">
+        <el-select v-model="form.userId" placeholder="请选择用户昵称" :disabled="title=='修改工资交税管理'">
+          <el-option
+            v-for="dict in userOptions"
+            :key="dict.id"
+            :label="dict.personName"
+            :value="dict.id"
+          ></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="手机号" prop="moblephone">
         <el-input
@@ -37,24 +29,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="应发工资" prop="salaryPayable">
-        <el-input
-          v-model="queryParams.salaryPayable"
-          placeholder="请输入应发工资"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="实发工资" prop="salaryNet">
-        <el-input
-          v-model="queryParams.salaryNet"
-          placeholder="请输入实发工资"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <!-- ：0已发放 1未发放 -->
       <el-form-item label="发放状态" prop="grantStatus">
         <el-select v-model="queryParams.grantStatus" placeholder="请选择发放状态" clearable size="small">
@@ -67,33 +41,24 @@
         </el-select>
       </el-form-item>
       <el-form-item label="工资年份" prop="wagesYear">
-        <el-input
+        <el-date-picker
           v-model="queryParams.wagesYear"
-          placeholder="请输入工资年份"
+          placeholder="请选择工资年份"
           clearable
           size="small"
-          @keyup.enter.native="handleQuery"
-        />
+          type="year"
+          value-format="yyyy"
+        ></el-date-picker>
       </el-form-item>
       <el-form-item label="工资月份" prop="wagesMonth">
-        <el-input
+        <el-date-picker
           v-model="queryParams.wagesMonth"
-          placeholder="请输入工资月份"
+          placeholder="请选择工资月份"
           clearable
           size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <!-- ：0正常 1停用 -->
-      <el-form-item label="状态" prop="state">
-        <el-select v-model="queryParams.state" placeholder="请选择状态" clearable size="small">
-          <el-option
-            v-for="dict in stateOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
-          />
-        </el-select>
+          type="month"
+          value-format="yyyy-MM"
+        ></el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -144,8 +109,7 @@
 
     <el-table v-loading="loading" :data="manageList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <!-- <el-table-column label="主键id" align="center" prop="id" /> -->
-      <el-table-column label="用户id" align="center" prop="userId" />
+      <!-- <el-table-column label="用户id" align="center" prop="userId" /> -->
       <el-table-column label="用户昵称" align="center" prop="nickName" />
       <el-table-column label="手机号" align="center" prop="moblephone" />
       <el-table-column label="客户单位" align="center" prop="clientUnit" />
@@ -160,7 +124,6 @@
       />
       <el-table-column label="工资年份" align="center" prop="wagesYear" />
       <el-table-column label="工资月份" align="center" prop="wagesMonth" />
-      <!-- <el-table-column label="备注" align="center" prop="remark" /> -->
       <!-- ：0正常 1停用 -->
       <el-table-column label="状态" align="center" prop="state" :formatter="stateFormat" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -194,11 +157,15 @@
     <!-- 添加或修改工资管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="用户id" prop="userId">
-          <el-input v-model="form.userId" placeholder="请输入用户id" />
-        </el-form-item>
-        <el-form-item label="用户昵称" prop="nickName">
-          <el-input v-model="form.nickName" placeholder="请输入用户昵称" />
+        <el-form-item label="用户昵称" prop="userId">
+          <el-select v-model="form.userId" placeholder="请选择用户昵称">
+            <el-option
+              v-for="dict in userOptions"
+              :key="dict.id"
+              :label="dict.personName"
+              :value="dict.id"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="手机号" prop="moblephone">
           <el-input v-model="form.moblephone" placeholder="请输入手机号" />
@@ -224,13 +191,22 @@
           </el-select>
         </el-form-item>
         <el-form-item label="工资年份" prop="wagesYear">
-          <el-input v-model="form.wagesYear" placeholder="请输入工资年份" />
+          <el-date-picker
+            v-model="form.wagesYear"
+            placeholder="请选择工资年份"
+            clearable
+            type="year"
+            value-format="yyyy"
+          ></el-date-picker>
         </el-form-item>
         <el-form-item label="工资月份" prop="wagesMonth">
-          <el-input v-model="form.wagesMonth" placeholder="请输入工资月份" />
-        </el-form-item>
-        <el-form-item label="删除标记" prop="delFlag">
-          <el-input v-model="form.delFlag" placeholder="请输入删除标记" />
+          <el-date-picker
+            v-model="form.wagesMonth"
+            placeholder="请选择工资月份"
+            clearable
+            type="month"
+            value-format="yyyy-MM"
+          ></el-date-picker>
         </el-form-item>
         <!-- ：0正常 1停用 -->
         <el-form-item label="状态">
@@ -253,7 +229,7 @@
 </template>
 
 <script>
-import { listManage, getManage, delManage, addManage, updateManage, exportManage } from "@/api/salary/index";
+import { listManage, getManage, delManage, addManage, updateManage, exportManage, getUser } from "@/api/salary/index";
 
 export default {
   name: "salary",
@@ -283,26 +259,35 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        userId: undefined,
         nickName: undefined,
         moblephone: undefined,
         clientUnit: undefined,
-        salaryPayable: undefined,
-        salaryNet: undefined,
         grantStatus: undefined,
         wagesYear: undefined,
         wagesMonth: undefined,
-        state: undefined
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-      }
+        userId: [{ required: true, message: '请选择用户昵称', trigger: 'change' }],
+        moblephone: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
+        clientUnit: [{ required: true, message: '请输入客户单位', trigger: 'blur' }],
+        salaryPayable: [{ required: true, message: '请输入应发工资', trigger: 'blur' }],
+        salaryNet: [{ required: true, message: '请输入实发工资', trigger: 'blur' }],
+        grantStatus: [{ required: true, message: '请选择发放状态', trigger: 'change' }],
+        wagesYear: [{ required: true, message: '请选择工资年份', trigger: 'change' }],
+        wagesMonth: [{ required: true, message: '请选择工资年份', trigger: 'change' }],
+      },
+      // 员工信息
+      userOptions: []
     };
   },
   created () {
     this.getList();
+    getUser().then(response => {
+      this.userOptions = response.rows;
+    });
     this.getDicts("grant_status").then(response => {
       this.grantStatusOptions = response.data;
     });
