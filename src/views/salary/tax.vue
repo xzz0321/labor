@@ -137,7 +137,7 @@
     <!-- 添加或修改工资交税管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="用户昵称" :prop="title=='修改工资交税管理'? '': userId">
+        <el-form-item label="用户昵称" :prop="title=='修改工资交税管理'? '': 'userId'">
           <el-select v-model="form.userId" placeholder="请选择用户昵称" :disabled="title=='修改工资交税管理'">
             <el-option
               v-for="dict in userOptions"
@@ -235,10 +235,18 @@ export default {
         wagesMonth: undefined,
       },
       // 表单参数
-      form: {},
+      form: {
+        userId: undefined,
+        moblephone: undefined,
+        clientUnit: undefined,
+        grossPay: undefined,
+        afterTaxWages: undefined,
+        wagesYear: undefined,
+        wagesMonth: undefined
+      },
       // 表单校验
       rules: {
-        userId: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
+        userId: [{ required: true, message: '请输入用户昵称', trigger: 'blur' }],
         moblephone: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
         clientUnit: [{ required: true, message: '请输入客户单位', trigger: 'blur' }],
         grossPay: [{ required: true, message: '请输入税前工资', trigger: 'blur' }],
