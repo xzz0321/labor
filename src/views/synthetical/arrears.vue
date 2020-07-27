@@ -12,21 +12,14 @@
         />
       </el-form-item>
       <el-form-item label="公司名称" prop="companyName">
-        <el-input
-          v-model="queryParams.companyName"
-          placeholder="请输入公司名称"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-        <!-- <el-select v-model="queryParams.companyName" placeholder="请选择公司名称" clearable size="small">
+        <el-select v-model="queryParams.companyName" placeholder="请选择派遣公司" clearable size="small">
           <el-option
-            v-for="dict in grantStatusOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
+            v-for="dict in dispatchOptions"
+            :key="dict.companyName"
+            :label="dict.companyName"
+            :value="dict.companyName"
           />
-        </el-select>-->
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>

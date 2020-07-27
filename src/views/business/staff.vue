@@ -79,8 +79,6 @@
 
     <el-table v-loading="loading" :data="infoList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <!-- <el-table-column label="用工单位" align="center" prop="employerId" :formatter="DispatchEmployee" /> -->
-      <el-table-column label="用工单位" align="center" prop="companyName"/>
       <el-table-column
         label="劳务派遣公司"
         align="center"
@@ -88,6 +86,7 @@
         width="120"
         :formatter="Dispatch"
       />
+      <el-table-column label="用工单位" align="center" prop="companyName" />
       <el-table-column label="员工姓名" align="center" prop="personName" />
       <!-- 0是未退款 1是已退款 2是已发起退款 3是已退回 -->
       <el-table-column label="民族" align="center" prop="personNation" />
@@ -141,7 +140,13 @@
     <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="140px">
         <el-form-item label="公司名称" prop="companyId">
-          <el-select v-model="form.companyId" placeholder="请选择派遣公司" clearable size="small">
+          <el-select
+            v-model="form.companyId"
+            placeholder="请选择派遣公司"
+            clearable
+            size="small"
+            @blur="getEmployeeOptions(uploadForm.companyId)"
+          >
             <el-option
               v-for="dict in dispatchOptions"
               :key="dict.companyNumber"
@@ -150,7 +155,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="用工单位" prop="employerId">
+        <el-form-item label="用工单位">
           <el-select v-model="form.employerId" placeholder="请选择用工单位" clearable size="small">
             <el-option
               v-for="dict in employeeOptions"
@@ -229,7 +234,13 @@
         :rules="uploadRules"
       >
         <el-form-item label="公司名称" prop="companyId">
-          <el-select v-model="uploadForm.companyId" placeholder="请选择派遣公司" clearable size="small">
+          <el-select
+            v-model="uploadForm.companyId"
+            placeholder="请选择派遣公司"
+            clearable
+            size="small"
+            @blur="getEmployeeOptions(uploadForm.companyId)"
+          >
             <el-option
               v-for="dict in dispatchOptions"
               :key="dict.companyNumber"
@@ -238,7 +249,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="用工单位" prop="employerId">
+        <el-form-item label="用工单位">
           <el-select v-model="uploadForm.employerId" placeholder="请选择用工单位" clearable size="small">
             <el-option
               v-for="dict in employeeOptions"
@@ -317,7 +328,7 @@ export default {
       // 表单校验
       rules: {
         companyId: [{ required: true, message: '请选择', trigger: 'change' }],
-        employerId: [{ required: true, message: '请选择', trigger: 'change' }],
+        // employerId: [{ required: true, message: '请选择', trigger: 'change' }],
         personName: [{ required: true, message: '请输入员工姓名', trigger: 'blur' }],
         personNation: [{ required: true, message: '请输入民族', trigger: 'blur' }],
         personRelation: [{ required: true, message: '请输入联系方式', trigger: 'blur' }],
@@ -341,8 +352,8 @@ export default {
       personageOrUnitOptions: [],
       uploadForm: {},
       uploadRules: {
-        companyId: [{ required: true, message: '请选择', trigger: 'change' }],
-        employerId: [{ required: true, message: '请选择', trigger: 'change' }]
+        companyId: [{ required: true, message: '请选择', trigger: 'change' }]
+        // employerId: [{ required: true, message: '请选择', trigger: 'change' }]
       },
       // 用户导入参数
       upload: {
@@ -366,14 +377,17 @@ export default {
     getDispatch().then(response => {
       this.dispatchOptions = response.rows;
     });
-    getEmployee().then(response => {
-      this.employeeOptions = response.rows;
-    });
     this.getDicts("personage_unit").then(response => {
       this.personageOrUnitOptions = response.data;
     });
   },
   methods: {
+    // 获取用工单位
+    getEmployeeOptions (id) {
+      getEmployee(id).then(response => {
+        this.employeeOptions = response.rows;
+      });
+    },
     // 派遣单位字典翻译
     Dispatch (row, column) {
       return selectDispatch(this.dispatchOptions, row.companyId);

@@ -49,11 +49,11 @@ export function getDispatch () {
 }
 
 // 获取用工单位
-export function getEmployee () {
+export function getEmployee (data) {
   return request({
     url: '/pay/record/employeeList',
     method: 'post',
-    data: {}
+    data: data
   })
 }
 
