@@ -1,4 +1,4 @@
-<!-- 个人缴费-人事-退款查询 -->
+<!-- 个人缴费-财务-退款查询 -->
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="110px">

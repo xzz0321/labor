@@ -1,4 +1,4 @@
-<!-- 个人缴费-财务-退款管理 -->
+<!-- 个人缴费-人事-退款申请 -->
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="110px">
@@ -66,8 +66,7 @@
           type="primary"
           icon="el-icon-s-finance"
           size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
+          @click="handleAdd"
           v-hasPermi="['business:message:remove']"
         >退款</el-button>
       </el-col>
@@ -84,7 +83,7 @@
 
     <el-table v-loading="loading" :data="messageList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="用户" align="center" prop="userName"/>
+      <el-table-column label="用户" align="center" prop="userName" />
       <!-- 0是未退款 1是已退款 2是已发起退款 3是已退回 -->
       <el-table-column
         label="退款状态"
@@ -141,11 +140,35 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+
+    <!-- 添加退款申请 -->
+    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="140px">
+        <el-form-item label="退款人" prop="companyNumber">
+          <el-select v-model="form.userId" placeholder="请选择退款人">
+            <el-option
+              v-for="dict in userOptions"
+              :key="dict.id"
+              :label="dict.personName"
+              :value="dict.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="退款金额" prop="companyName">
+          <el-input v-model="form.companyName" placeholder="请输入退款金额" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { listMessage, delMessage, exportMessage, selectMessage, getDispatch, selectDispatch, getEmployee, selectEmployee } from "@/api/personageBuill/refund";
+import { getUser } from "@/api/salary/index";
 
 export default {
   name: "refund",
@@ -197,7 +220,14 @@ export default {
       // 派遣单位
       dispatchOptions: [],
       // 用工单位
-      employeeOptions: []
+      employeeOptions: [],
+      // 表单参数
+      form: {},
+      // 表单校验
+      rules: {
+      },
+      // 员工信息
+      userOptions: []
     };
   },
   created () {
@@ -208,8 +238,56 @@ export default {
     getEmployee({}).then(response => {
       this.employeeOptions = response.rows;
     });
+    getUser().then(response => {
+      this.userOptions = response.rows;
+    });
   },
   methods: {
+    /** 新增退款按钮操作 */
+    handleAdd () {
+      this.reset();
+      this.open = true;
+      this.title = "添加退款申请";
+    },
+    /** 提交按钮 */
+    submitForm: function () {
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          if (this.form.dispatchingId != undefined) {
+            updateInfo(this.form).then(response => {
+              if (response.code === 200) {
+                this.msgSuccess("添加成功");
+                this.open = false;
+                this.getList();
+              }
+            });
+          }
+        }
+      });
+    },
+    // 表单重置
+    reset () {
+      this.form = {
+        dispatchingId: undefined,
+        companyNumber: undefined,
+        companyName: undefined,
+        creditCode: undefined,
+        legalPerson: undefined,
+        depositBank: undefined,
+        depositBankAccount: undefined,
+        address: undefined,
+        linkman: undefined,
+        phone: undefined,
+        endUpdateTime: undefined,
+        delFlag: undefined,
+        updateTime: undefined,
+        updateBy: undefined,
+        createTime: undefined,
+        createBy: undefined,
+        remark: undefined
+      };
+      this.resetForm("form");
+    },
     // 退款字典翻译
     DispatchMessage (row, column) {
       return selectMessage(this.refundMessageArr, row.refundMessage);
@@ -280,7 +358,7 @@ export default {
       this.single = selection.length != 1
       this.multiple = !selection.length
     },
-    /** 删除按钮操作 */
+    /** 退款按钮操作 */
     handleDelete (row) {
       const ids = row.id || this.ids;
       this.$confirm('是否确认退款信息编号为"' + ids + '"的数据项?', "警告", {

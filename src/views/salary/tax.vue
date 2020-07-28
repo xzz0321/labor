@@ -147,9 +147,9 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="手机号" prop="moblephone">
+        <!-- <el-form-item label="手机号" prop="moblephone">
           <el-input v-model="form.moblephone" placeholder="请输入手机号" />
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="客户单位" prop="clientUnit">
           <el-input v-model="form.clientUnit" placeholder="请输入客户单位" />
         </el-form-item>
@@ -247,7 +247,7 @@ export default {
       // 表单校验
       rules: {
         userId: [{ required: true, message: '请输入用户昵称', trigger: 'blur' }],
-        moblephone: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
+        // moblephone: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
         clientUnit: [{ required: true, message: '请输入客户单位', trigger: 'blur' }],
         grossPay: [{ required: true, message: '请输入税前工资', trigger: 'blur' }],
         afterTaxWages: [{ required: true, message: '请输入税后工资', trigger: 'blur' }],

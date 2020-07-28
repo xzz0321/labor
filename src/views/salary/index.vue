@@ -1,13 +1,13 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="用户昵称" :prop="title=='修改工资交税管理'? '': 'userId'">
-        <el-select v-model="form.userId" placeholder="请选择用户昵称" :disabled="title=='修改工资交税管理'">
+      <el-form-item label="用户昵称" prop="nickName">
+        <el-select v-model="queryParams.nickName" placeholder="请选择用户昵称" clearable size="small">
           <el-option
             v-for="dict in userOptions"
             :key="dict.id"
             :label="dict.personName"
-            :value="dict.id"
+            :value="dict.personName"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -157,7 +157,7 @@
     <!-- 添加或修改工资管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="用户昵称" prop="userId">
+        <el-form-item label="用户昵称" :prop="title=='修改工资交税管理'? '': 'userId'">
           <el-select v-model="form.userId" placeholder="请选择用户昵称">
             <el-option
               v-for="dict in userOptions"
@@ -167,9 +167,9 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="手机号" prop="moblephone">
+        <!-- <el-form-item label="手机号" prop="moblephone">
           <el-input v-model="form.moblephone" placeholder="请输入手机号" />
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="客户单位" prop="clientUnit">
           <el-input v-model="form.clientUnit" placeholder="请输入客户单位" />
         </el-form-item>
@@ -280,7 +280,7 @@ export default {
       // 表单校验
       rules: {
         userId: [{ required: true, message: '请选择用户昵称', trigger: 'change' }],
-        moblephone: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
+        // moblephone: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
         clientUnit: [{ required: true, message: '请输入客户单位', trigger: 'blur' }],
         salaryPayable: [{ required: true, message: '请输入应发工资', trigger: 'blur' }],
         salaryNet: [{ required: true, message: '请输入实发工资', trigger: 'blur' }],
