@@ -21,7 +21,7 @@ export function getDispatch () {
 export function selectDispatch (datas, value) {
   var actions = [];
   Object.keys(datas).map((key) => {
-    if (datas[key].companyNumber == ('' + value)) {
+    if (datas[key].dispatchingId == ('' + value)) {
       actions.push(datas[key].companyName);
       return false;
     }

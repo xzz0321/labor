@@ -80,7 +80,7 @@
       <el-table-column label="法定代表人" align="center" prop="legalPerson" width="130" />
       <el-table-column label="开户银行" align="center" prop="depositBank" />
       <el-table-column label="开户银行账号" align="center" prop="depositBankAccount" width="130" />
-      <el-table-column label="地址" align="center" prop="address" />
+      <el-table-column label="地址" align="center" prop="address" width="130" />
       <el-table-column label="联系人" align="center" prop="linkman" />
       <el-table-column label="联系电话" align="center" prop="phone" />
       <el-table-column label="开票类型" align="center" prop="billType" :formatter="billTypeFormat" />

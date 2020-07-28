@@ -186,6 +186,16 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        companyNumber: [{ required: true, message: '请输入公司编号', trigger: 'blur' }],
+        companyName: [{ required: true, message: '请输入公司名称', trigger: 'blur' }],
+        creditCode: [{ required: true, message: '请输入统一社会信用代码', trigger: 'blur' }],
+        legalPerson: [{ required: true, message: '请输入法定代表人', trigger: 'blur' }],
+        depositBank: [{ required: true, message: '请输入开户银行', trigger: 'blur' }],
+        depositBankAccount: [{ required: true, message: '请输入开户银行账号', trigger: 'blur' }],
+        address: [{ required: true, message: '请输入地址', trigger: 'blur' }],
+        linkman: [{ required: true, message: '请输入联系人', trigger: 'blur' }],
+        phone: [{ required: true, message: '请输入联系电话', trigger: 'blur' }],
+        endUpdateTime: [{ required: true, message: '请选择最后修改日期', trigger: 'change' }]
       }
     };
   },
