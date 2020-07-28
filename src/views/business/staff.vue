@@ -105,7 +105,12 @@
       <el-table-column label="医疗生育" align="center" prop="socialMedical" />
       <el-table-column label="工伤" align="center" prop="socialInjury" />
       <el-table-column label="失业" align="center" prop="socialUnemployment" />
+      <el-table-column label="缴费方式" align="center" prop="payType" />
+      <!-- <el-table-column label="缴费金额" align="center" prop="accumulationNumber" /> -->
       <el-table-column label="公积金基数" align="center" prop="accumulationNumber" />
+      <el-table-column label="公积金起始日期" align="center" prop="accumulationDate" />
+      <el-table-column label="社保基数" align="center" prop="socialNumber" />
+      <el-table-column label="社保起始日期" align="center" prop="socialDate" />
       <el-table-column label="单位承担" align="center" prop="accumulationUnit" />
       <el-table-column label="个人承担" align="center" prop="accumulationPerson" />
       <el-table-column
@@ -213,8 +218,32 @@
         <el-form-item label="失业" prop="socialUnemployment">
           <el-input v-model="form.socialUnemployment" placeholder="请输入失业" />
         </el-form-item>
+        <el-form-item label="缴费方式" prop="payType">
+          <el-input v-model="form.payType" placeholder="请输入缴费方式" />
+        </el-form-item>
         <el-form-item label="公积金基数" prop="accumulationNumber">
           <el-input v-model="form.accumulationNumber" placeholder="请输入公积金基数" />
+        </el-form-item>
+        <el-form-item label="公积金起始日期" prop="accumulationDate">
+          <el-date-picker
+            v-model="form.accumulationDate"
+            placeholder="请选择公积金起始日期"
+            clearable
+            type="date"
+            value-format="yyyy-MM-dd"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item label="社保基数" prop="socialNumber">
+          <el-input v-model="form.socialNumber" placeholder="请输入社保基数" />
+        </el-form-item>
+        <el-form-item label="社保起始日期" prop="socialDate">
+          <el-date-picker
+            v-model="form.socialDate"
+            placeholder="请选择社保起始日期"
+            clearable
+            type="date"
+            value-format="yyyy-MM-dd"
+          ></el-date-picker>
         </el-form-item>
         <el-form-item label="单位承担" prop="accumulationUnit">
           <el-input v-model="form.accumulationUnit" placeholder="请输入单位承担" />
@@ -346,7 +375,11 @@ export default {
         socialMedical: [{ required: true, message: '请输入医疗生育', trigger: 'blur' }],
         socialInjury: [{ required: true, message: '请输入工伤', trigger: 'blur' }],
         socialUnemployment: [{ required: true, message: '请输入失业', trigger: 'blur' }],
+        payType: [{ required: true, message: '请输入缴费方式', trigger: 'blur' }],
         accumulationNumber: [{ required: true, message: '请输入公积金基数', trigger: 'blur' }],
+        accumulationDate: [{ required: true, message: '请选择公积金起始日期', trigger: 'change' }],
+        socialNumber: [{ required: true, message: '请输入社保基数', trigger: 'blur' }],
+        socialDate: [{ required: true, message: '请选择社保起始日期', trigger: 'change' }],
         accumulationUnit: [{ required: true, message: '请输入单位承担', trigger: 'blur' }],
         accumulationPerson: [{ required: true, message: '请输入个人承担', trigger: 'blur' }],
       },

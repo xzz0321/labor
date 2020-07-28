@@ -102,7 +102,7 @@
         :formatter="Dispatch"
       />
       <el-table-column label="缴费方式" align="center" prop="payMethod" />
-      <el-table-column label="缴费金额" align="center" prop="payMoney" />
+      <!-- <el-table-column label="缴费金额" align="center" prop="payMoney" /> -->
       <el-table-column label="社保起始日期" align="center" prop="socialDate" width="100">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.socialDate, '{y}-{m}-{d}') }}</span>
