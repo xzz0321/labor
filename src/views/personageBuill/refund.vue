@@ -82,7 +82,7 @@
     </el-row>
 
     <el-table v-loading="loading" :data="messageList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
+      <!-- <el-table-column type="selection" width="55" align="center" /> -->
       <el-table-column label="用户" align="center" prop="userName" />
       <!-- 0是未退款 1是已退款 2是已发起退款 3是已退回 -->
       <el-table-column
@@ -92,6 +92,7 @@
         :formatter="DispatchMessage"
         width="100"
       />
+      <el-table-column label="退款金额" align="center" prop="refundAmount" />
       <el-table-column label="用工单位" align="center" prop="employerId" :formatter="DispatchEmployee" />
       <el-table-column
         label="劳务派遣公司"
@@ -120,7 +121,7 @@
       <el-table-column label="公积金基数" align="center" prop="accumulationNumber" width="100" />
       <el-table-column label="单位承担" align="center" prop="accumulationUnit" />
       <el-table-column label="个人承担" align="center" prop="accumulationPerson" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <!-- <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -130,7 +131,7 @@
             v-hasPermi="['business:message:remove']"
           >退款</el-button>
         </template>
-      </el-table-column>
+      </el-table-column>-->
     </el-table>
 
     <pagination
@@ -144,8 +145,8 @@
     <!-- 添加退款申请 -->
     <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="140px">
-        <el-form-item label="退款人" prop="companyNumber">
-          <el-select v-model="form.userId" placeholder="请选择退款人">
+        <el-form-item label="退款人" prop="personId">
+          <el-select v-model="form.personId" placeholder="请选择退款人">
             <el-option
               v-for="dict in userOptions"
               :key="dict.id"
@@ -154,8 +155,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="退款金额" prop="companyName">
-          <el-input v-model="form.companyName" placeholder="请输入退款金额" />
+        <el-form-item label="退款金额" prop="refundAmount">
+          <el-input v-model="form.refundAmount" placeholder="请输入退款金额" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -167,7 +168,7 @@
 </template>
 
 <script>
-import { listMessage, delMessage, exportMessage, selectMessage, getDispatch, selectDispatch, getEmployee, selectEmployee } from "@/api/personageBuill/refund";
+import { listMessage, delMessage, exportMessage, selectMessage, getDispatch, selectDispatch, getEmployee, selectEmployee, updateInfo } from "@/api/personageBuill/refund";
 import { getUser } from "@/api/salary/index";
 
 export default {
@@ -222,9 +223,14 @@ export default {
       // 用工单位
       employeeOptions: [],
       // 表单参数
-      form: {},
+      form: {
+        personId: undefined,
+        refundAmount: undefined
+      },
       // 表单校验
       rules: {
+        personId: [{ required: true, message: '请选择退款人', trigger: 'blur' }],
+        refundAmount: [{ required: true, message: '请输入退款金额', trigger: 'blur' }]
       },
       // 员工信息
       userOptions: []
@@ -253,38 +259,23 @@ export default {
     submitForm: function () {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.dispatchingId != undefined) {
-            updateInfo(this.form).then(response => {
-              if (response.code === 200) {
-                this.msgSuccess("添加成功");
-                this.open = false;
-                this.getList();
-              }
-            });
-          }
+          this.form.refundMessage = 2
+          updateInfo(this.form).then(response => {
+            if (response.code === 200) {
+              this.msgSuccess("添加成功");
+              this.open = false;
+              this.getList();
+            }
+          });
         }
       });
     },
     // 表单重置
     reset () {
       this.form = {
-        dispatchingId: undefined,
-        companyNumber: undefined,
-        companyName: undefined,
-        creditCode: undefined,
-        legalPerson: undefined,
-        depositBank: undefined,
-        depositBankAccount: undefined,
-        address: undefined,
-        linkman: undefined,
-        phone: undefined,
-        endUpdateTime: undefined,
-        delFlag: undefined,
-        updateTime: undefined,
-        updateBy: undefined,
-        createTime: undefined,
-        createBy: undefined,
-        remark: undefined
+        personId: undefined,
+        refundAmount: undefined,
+        refundMessage: 2
       };
       this.resetForm("form");
     },

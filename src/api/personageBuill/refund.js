@@ -80,3 +80,12 @@ export function selectEmployee (datas, value) {
   })
   return actions.join('');
 }
+
+// 提交退款申请
+export function updateInfo (data) {
+  return request({
+    url: '/pay/record/add',
+    method: 'post',
+    data: data
+  })
+}

@@ -71,6 +71,7 @@
         :formatter="DispatchMessage"
         width="100"
       />
+      <el-table-column label="退款金额" align="center" prop="refundAmount" />
       <el-table-column label="用工单位" align="center" prop="employerId" :formatter="DispatchEmployee" />
       <el-table-column
         label="劳务派遣公司"
