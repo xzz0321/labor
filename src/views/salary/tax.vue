@@ -98,7 +98,7 @@
 
     <el-table v-loading="loading" :data="taxList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="用户昵称" align="center" prop="nickName" />
+      <el-table-column label="用户姓名" align="center" prop="nickName" />
       <el-table-column label="手机号" align="center" prop="moblephone" />
       <el-table-column label="客户单位" align="center" prop="clientUnit" />
       <el-table-column label="税前工资" align="center" prop="grossPay" />
