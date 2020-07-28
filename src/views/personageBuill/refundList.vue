@@ -83,7 +83,7 @@
     </el-row>
 
     <el-table v-loading="loading" :data="messageList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
+      <!-- <el-table-column type="selection" width="55" align="center" /> -->
       <el-table-column label="用户" align="center" prop="userName" />
       <!-- 0是未退款 1是已退款 2是已发起退款 3是已退回 -->
       <el-table-column
