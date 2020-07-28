@@ -287,9 +287,9 @@
           <el-select v-model="uploadForm.employerId" placeholder="请选择用工单位" clearable size="small">
             <el-option
               v-for="dict in employeeOptions"
-              :key="dict.companyNumber"
+              :key="dict.unitId"
               :label="dict.companyName"
-              :value="dict.companyNumber"
+              :value="dict.unitId"
             />
           </el-select>
         </el-form-item>
