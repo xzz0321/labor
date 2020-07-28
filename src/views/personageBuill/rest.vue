@@ -178,7 +178,7 @@ export default {
     getList () {
       this.loading = true;
       listMessage(this.queryParams).then(response => {
-        this.messageList = response.list;
+        this.messageList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
