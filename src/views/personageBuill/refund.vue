@@ -295,7 +295,7 @@ export default {
     getList () {
       this.loading = true;
       listMessage(this.queryParams).then(response => {
-        this.messageList = response.rows;
+        this.messageList = response.list;
         this.total = response.total;
         this.loading = false;
       });

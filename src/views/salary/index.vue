@@ -309,7 +309,7 @@ export default {
     getList () {
       this.loading = true;
       listManage(this.queryParams).then(response => {
-        this.manageList = response.rows;
+        this.manageList = response.list;
         this.total = response.total;
         this.loading = false;
       });

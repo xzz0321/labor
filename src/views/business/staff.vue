@@ -277,9 +277,9 @@
           >
             <el-option
               v-for="dict in dispatchOptions"
-              :key="dict.unitId"
+              :key="dict.dispatchingId"
               :label="dict.companyName"
-              :value="dict.unitId"
+              :value="dict.dispatchingId"
             />
           </el-select>
         </el-form-item>
@@ -388,7 +388,10 @@ export default {
       // 用工单位
       employeeOptions: [],
       personageOrUnitOptions: [],
-      uploadForm: {},
+      uploadForm: {
+        employerId: undefined,
+        companyId: undefined
+      },
       uploadRules: {
         companyId: [{ required: true, message: '请选择', trigger: 'change' }]
         // employerId: [{ required: true, message: '请选择', trigger: 'change' }]
@@ -443,7 +446,7 @@ export default {
     getList () {
       this.loading = true;
       listInfo(this.queryParams).then(response => {
-        this.infoList = response.rows;
+        this.infoList = response.list;
         this.total = response.total;
         this.loading = false;
       });

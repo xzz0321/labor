@@ -272,7 +272,7 @@ export default {
     getList () {
       this.loading = true;
       listTax(this.queryParams).then(response => {
-        this.taxList = response.rows;
+        this.taxList = response.list;
         this.total = response.total;
         this.loading = false;
       });
