@@ -452,7 +452,7 @@ export default {
     getList () {
       this.loading = true;
       listInfo(this.queryParams).then(response => {
-        this.infoList = response.list;
+        this.infoList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
