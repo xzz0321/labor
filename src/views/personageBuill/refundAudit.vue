@@ -72,12 +72,18 @@
         width="100"
       />
       <el-table-column label="退款金额" align="center" prop="refundAmount" />
-      <el-table-column label="用工单位" align="center" prop="employerId" :formatter="DispatchEmployee" />
+      <el-table-column
+        label="用工单位"
+        align="center"
+        prop="employerId"
+        :formatter="DispatchEmployee"
+        width="160"
+      />
       <el-table-column
         label="劳务派遣公司"
         align="center"
         prop="companyId"
-        width="120"
+        width="160"
         :formatter="Dispatch"
       />
       <!-- <el-table-column label="缴费方式" align="center" prop="payMethod" /> -->

@@ -83,10 +83,16 @@
         label="劳务派遣公司"
         align="center"
         prop="companyId"
-        width="120px"
+        width="160px"
         :formatter="Dispatch"
       />
-      <el-table-column label="用工单位" align="center" prop="employerId" :formatter="DispatchEmployee" />
+      <el-table-column
+        label="用工单位"
+        align="center"
+        prop="employerId"
+        :formatter="DispatchEmployee"
+        width="160px"
+      />
       <el-table-column label="员工姓名" align="center" prop="personName" />
       <!-- 0是未退款 1是已退款 2是已发起退款 3是已退回 -->
       <el-table-column label="民族" align="center" prop="personNation" />
@@ -108,9 +114,9 @@
       <el-table-column label="缴费方式" align="center" prop="payType" />
       <!-- <el-table-column label="缴费金额" align="center" prop="accumulationNumber" /> -->
       <el-table-column label="公积金基数" align="center" prop="accumulationNumber" />
-      <el-table-column label="公积金起始日期" align="center" prop="accumulationDate" />
+      <el-table-column label="公积金起始日期" align="center" prop="accumulationDate" width="110px" />
       <el-table-column label="社保基数" align="center" prop="socialNumber" />
-      <el-table-column label="社保起始日期" align="center" prop="socialDate" />
+      <el-table-column label="社保起始日期" align="center" prop="socialDate" width="110px" />
       <el-table-column label="单位承担" align="center" prop="accumulationUnit" />
       <el-table-column label="个人承担" align="center" prop="accumulationPerson" />
       <el-table-column

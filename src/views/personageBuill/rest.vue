@@ -72,11 +72,11 @@
 
     <el-table v-loading="loading" :data="messageList" @selection-change="handleSelectionChange">
       <!-- <el-table-column type="selection" width="55" align="center" /> -->
-      <el-table-column label="公司名称或个人姓名" align="center" prop="companyName" />
+      <el-table-column label="公司名称或个人姓名" align="center" prop="companyName" width="160" />
       <el-table-column label="员工姓名" align="center" prop="personName" />
       <!-- 0是未退款 1是已退款 2是已发起退款 3是已退回 -->
       <el-table-column label="民族" align="center" prop="personNation" />
-      <el-table-column label="联系方式" align="center" prop="personRelation" />
+      <el-table-column label="联系方式" align="center" prop="personRelation" width="120" />
       <el-table-column label="性别" align="center" prop="personSex" />
       <el-table-column label="散户或单位" align="center" prop="personageOrUnit">
         <template slot-scope="scope">
