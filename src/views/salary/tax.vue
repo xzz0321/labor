@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="用户昵称" prop="nickName">
+      <el-form-item label="用户姓名" prop="nickName">
         <el-select v-model="queryParams.nickName" placeholder="请选择用户昵称" clearable size="small">
           <el-option
             v-for="dict in userOptions"
