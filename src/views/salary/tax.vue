@@ -20,10 +20,10 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="客户单位" prop="clientUnit">
+      <el-form-item label="公司名称" prop="clientUnit">
         <el-input
           v-model="queryParams.clientUnit"
-          placeholder="请输入客户单位"
+          placeholder="请输入公司名称"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -99,8 +99,8 @@
     <el-table v-loading="loading" :data="taxList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="用户姓名" align="center" prop="nickName" />
-      <el-table-column label="手机号" align="center" prop="moblephone" />
-      <el-table-column label="客户单位" align="center" prop="clientUnit" />
+      <el-table-column label="手机号" align="center" prop="moblephone" width="120px" />
+      <el-table-column label="公司名称" align="center" prop="clientUnit" width="240px" />
       <el-table-column label="税前工资" align="center" prop="grossPay" />
       <el-table-column label="税后工资" align="center" prop="afterTaxWages" />
       <el-table-column label="工资年份" align="center" prop="wagesYear" />
@@ -150,9 +150,9 @@
         <!-- <el-form-item label="手机号" prop="moblephone">
           <el-input v-model="form.moblephone" placeholder="请输入手机号" />
         </el-form-item>-->
-        <el-form-item label="客户单位" prop="clientUnit">
-          <el-input v-model="form.clientUnit" placeholder="请输入客户单位" />
-        </el-form-item>
+        <!-- <el-form-item label="公司名称" prop="clientUnit">
+          <el-input v-model="form.clientUnit" placeholder="请输入公司名称" />
+        </el-form-item>-->
         <el-form-item label="税前工资" prop="grossPay">
           <el-input v-model="form.grossPay" placeholder="请输入税前工资" />
         </el-form-item>
@@ -248,7 +248,7 @@ export default {
       rules: {
         userId: [{ required: true, message: '请输入用户姓名', trigger: 'blur' }],
         // moblephone: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
-        clientUnit: [{ required: true, message: '请输入客户单位', trigger: 'blur' }],
+        // clientUnit: [{ required: true, message: '请输入公司名称', trigger: 'blur' }],
         grossPay: [{ required: true, message: '请输入税前工资', trigger: 'blur' }],
         afterTaxWages: [{ required: true, message: '请输入税后工资', trigger: 'blur' }],
         wagesYear: [{ required: true, message: '请选择工资年份', trigger: 'change' }],
