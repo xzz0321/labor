@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
       <el-form-item label="用户姓名" prop="nickName">
-        <el-select v-model="queryParams.nickName" placeholder="请选择用户昵称" clearable size="small">
+        <el-select v-model="queryParams.nickName" placeholder="请选择用户姓名" clearable size="small">
           <el-option
             v-for="dict in userOptions"
             :key="dict.id"
@@ -156,8 +156,8 @@
     <!-- 添加或修改工资管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="用户昵称" :prop="title=='修改工资交税管理'? '': 'userId'">
-          <el-select v-model="form.userId" placeholder="请选择用户昵称">
+        <el-form-item label="用户姓名" :prop="title=='修改工资交税管理'? '': 'userId'">
+          <el-select v-model="form.userId" placeholder="请选择用户姓名">
             <el-option
               v-for="dict in userOptions"
               :key="dict.id"
@@ -278,7 +278,7 @@ export default {
       },
       // 表单校验
       rules: {
-        userId: [{ required: true, message: '请选择用户昵称', trigger: 'change' }],
+        userId: [{ required: true, message: '请选择用户姓名', trigger: 'change' }],
         // moblephone: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
         clientUnit: [{ required: true, message: '请输入客户单位', trigger: 'blur' }],
         salaryPayable: [{ required: true, message: '请输入应发工资', trigger: 'blur' }],

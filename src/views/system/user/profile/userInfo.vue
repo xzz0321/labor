@@ -1,8 +1,8 @@
 <template>
   <el-form ref="form" :model="user" :rules="rules" label-width="80px">
-    <el-form-item label="用户昵称" prop="nickName">
+    <el-form-item label="用户姓名" prop="nickName">
       <el-input v-model="user.nickName" />
-    </el-form-item> 
+    </el-form-item>
     <el-form-item label="手机号码" prop="phonenumber">
       <el-input v-model="user.phonenumber" maxlength="11" />
     </el-form-item>
@@ -31,12 +31,12 @@ export default {
       type: Object
     }
   },
-  data() {
+  data () {
     return {
       // 表单校验
       rules: {
         nickName: [
-          { required: true, message: "用户昵称不能为空", trigger: "blur" }
+          { required: true, message: "用户姓名不能为空", trigger: "blur" }
         ],
         email: [
           { required: true, message: "邮箱地址不能为空", trigger: "blur" },
@@ -58,7 +58,7 @@ export default {
     };
   },
   methods: {
-    submit() {
+    submit () {
       this.$refs["form"].validate(valid => {
         if (valid) {
           updateUserProfile(this.user).then(response => {
@@ -69,7 +69,7 @@ export default {
         }
       });
     },
-    close() {
+    close () {
       this.$store.dispatch("tagsView/delView", this.$route);
       this.$router.push({ path: "/index" });
     }
