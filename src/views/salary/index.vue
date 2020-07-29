@@ -308,7 +308,7 @@ export default {
     getList () {
       this.loading = true;
       listManage(this.queryParams).then(response => {
-        this.manageList = response.list;
+        this.manageList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
