@@ -127,3 +127,13 @@
 .el-range-separator {
   box-sizing: content-box;
 }
+
+// 列表高亮
+.app-container {
+  .el-table {
+    .warning-row {
+      background: oldlace;
+      color: red;
+    }
+  }
+}

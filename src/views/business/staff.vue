@@ -77,8 +77,14 @@
       </el-col>-->
     </el-row>
 
-    <el-table v-loading="loading" :data="infoList" @selection-change="handleSelectionChange">
+    <el-table
+      v-loading="loading"
+      :data="infoList"
+      @selection-change="handleSelectionChange"
+      :row-class-name="tableRowClassName"
+    >
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="员工姓名" align="center" prop="personName" />
       <el-table-column
         label="劳务派遣公司"
         align="center"
@@ -93,7 +99,6 @@
         :formatter="DispatchEmployee"
         width="160px"
       />
-      <el-table-column label="员工姓名" align="center" prop="personName" />
       <!-- 0是未退款 1是已退款 2是已发起退款 3是已退回 -->
       <el-table-column label="民族" align="center" prop="personNation" />
       <el-table-column label="联系方式" align="center" prop="personRelation" width="110px" />
@@ -429,6 +434,13 @@ export default {
     });
   },
   methods: {
+    // 减员行
+    tableRowClassName ({ row, rowIndex }) {
+      if (rowIndex === 1) {
+        return 'warning-row';
+      }
+      return '';
+    },
     // 获取用工单位
     getEmployeeOptions (id) {
       console.log(id)
@@ -600,3 +612,16 @@ export default {
   }
 };
 </script>
+
+<style scoped lang="scss">
+.app-container {
+  .el-table {
+    .warning-row {
+      background: oldlace;
+    }
+    .success-row {
+      background: #f0f9eb;
+    }
+  }
+}
+</style>
