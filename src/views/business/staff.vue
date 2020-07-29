@@ -6,9 +6,9 @@
         <el-select v-model="queryParams.companyNumber" placeholder="请选择派遣公司" clearable size="small">
           <el-option
             v-for="dict in dispatchOptions"
-            :key="dict.companyNumber"
+            :key="dict.dispatchingId"
             :label="dict.companyName"
-            :value="dict.companyNumber"
+            :value="dict.dispatchingId"
           />
         </el-select>
       </el-form-item>
@@ -131,6 +131,12 @@
         width="140px"
       >
         <template slot-scope="scope">
+          <el-button
+            v-if="scope.row.workersIncreased==0"
+            size="mini"
+            type="text"
+            @click="baja(scope.row.id)"
+          >减员</el-button>
           <el-button
             size="mini"
             type="text"
@@ -338,7 +344,7 @@
 </template>
 
 <script>
-import { listInfo, delInfo, addInfo, updateInfo, exportInfo, getDispatch, selectDispatch } from "@/api/business/staff";
+import { listInfo, delInfo, addInfo, updateInfo, exportInfo, getDispatch, selectDispatch, downsizing } from "@/api/business/staff";
 import { getEmployee, selectEmployee } from "@/api/personageBuill/refund";
 import { getToken } from "@/utils/auth";
 
@@ -434,9 +440,16 @@ export default {
     });
   },
   methods: {
+    // 减员
+    baja (id) {
+      downsizing(id).then(response => {
+        this.getList();
+        this.msgSuccess("操作成功");
+      })
+    },
     // 减员行
-    tableRowClassName ({ row, rowIndex }) {
-      if (rowIndex === 1) {
+    tableRowClassName ({ row }) {
+      if (row.workersIncreased == 1) {
         return 'warning-row';
       }
       return '';

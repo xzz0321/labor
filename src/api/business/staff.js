@@ -70,3 +70,11 @@ export function exportInfo () {
     method: 'get',
   })
 }
+
+// 减员
+export function downsizing (id) {
+  return request({
+    url: '/people/management/' + dispatchingId,
+    method: 'get'
+  })
+}
