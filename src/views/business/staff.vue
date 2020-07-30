@@ -118,17 +118,18 @@
       <el-table-column label="失业" align="center" prop="socialUnemployment" />
       <el-table-column label="缴费方式" align="center" prop="payType" />
       <!-- <el-table-column label="缴费金额" align="center" prop="accumulationNumber" /> -->
-      <el-table-column label="公积金基数" align="center" prop="accumulationNumber" />
-      <el-table-column label="公积金起始日期" align="center" prop="accumulationDate" width="110px" />
+      <el-table-column label="公积金基数" align="center" prop="accumulationNumber" width="60px" />
+      <el-table-column label="公积金比例" align="center" prop="accumulationFund" width="60px" />
+      <el-table-column label="公积金起始日期" align="center" prop="accumulationDate" width="95px" />
       <el-table-column label="社保基数" align="center" prop="socialNumber" />
-      <el-table-column label="社保起始日期" align="center" prop="socialDate" width="110px" />
+      <el-table-column label="社保起始日期" align="center" prop="socialDate" width="95px" />
       <el-table-column label="单位承担" align="center" prop="accumulationUnit" />
       <el-table-column label="个人承担" align="center" prop="accumulationPerson" />
       <el-table-column
         label="操作"
         align="center"
         class-name="small-padding fixed-width"
-        width="140px"
+        width="180px"
       >
         <template slot-scope="scope">
           <el-button
@@ -240,6 +241,9 @@
         </el-form-item>
         <el-form-item label="公积金基数" prop="accumulationNumber">
           <el-input v-model="form.accumulationNumber" placeholder="请输入公积金基数" />
+        </el-form-item>
+        <el-form-item label="公积金比例" prop="accumulationFund">
+          <el-input v-model="form.accumulationFund" placeholder="请输入公积金比例" />
         </el-form-item>
         <el-form-item label="公积金起始日期" prop="accumulationDate">
           <el-date-picker
@@ -394,6 +398,7 @@ export default {
         socialUnemployment: [{ required: true, message: '请输入失业', trigger: 'blur' }],
         payType: [{ required: true, message: '请输入缴费方式', trigger: 'blur' }],
         accumulationNumber: [{ required: true, message: '请输入公积金基数', trigger: 'blur' }],
+        accumulationFund: [{ required: true, message: '请输入公积金比例', trigger: 'blur' }],
         accumulationDate: [{ required: true, message: '请选择公积金起始日期', trigger: 'change' }],
         socialNumber: [{ required: true, message: '请输入社保基数', trigger: 'blur' }],
         socialDate: [{ required: true, message: '请选择社保起始日期', trigger: 'change' }],

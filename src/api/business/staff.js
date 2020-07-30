@@ -72,9 +72,11 @@ export function exportInfo () {
 }
 
 // 减员
-export function downsizing (id) {
+export function downsizing (personIds) {
+  console.log(personIds)
   return request({
-    url: '/people/management/' + dispatchingId,
-    method: 'get'
+    url: '/people/management/depletion',
+    method: 'get',
+    params: { personIds }
   })
 }
