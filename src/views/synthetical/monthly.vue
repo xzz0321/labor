@@ -41,10 +41,10 @@
 
     <el-table v-loading="loading" :data="manageList" @selection-change="handleSelectionChange">
       <!-- <el-table-column type="selection" width="55" align="center" /> -->
-      <el-table-column label="姓名" align="center" prop="userName" />
-      <el-table-column label="公司名称" align="center" prop="companyName" width="160px" />
-      <el-table-column label="开户银行账号" align="center" prop="depositBankAccount" width="160px" />
-      <el-table-column label="地址" align="center" prop="address" width="240px" />
+      <el-table-column label="姓名" align="center" prop="userName" width="80" />
+      <el-table-column label="公司名称" align="center" prop="companyName" width="240px" />
+      <el-table-column label="开户银行账号" align="center" prop="depositBankAccount" width="240px" />
+      <el-table-column label="地址" align="center" prop="address" width="400px" />
       <el-table-column label="社保基数" align="center" prop="socialNumber" />
       <el-table-column label="养老" align="center" prop="socialOld" />
       <el-table-column label="医疗生育" align="center" prop="socialMedical" />
