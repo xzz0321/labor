@@ -80,3 +80,15 @@ export function downsizing (personIds) {
     params: { personIds }
   })
 }
+
+// 回显公积金比例
+export function selectAccumulation (datas, values) {
+  var actions = [];
+  Object.keys(datas).map((key) => {
+    if (datas[key].value == ('' + values)) {
+      actions.push(datas[key].label);
+      return false;
+    }
+  })
+  return actions.join('');
+}

@@ -119,7 +119,13 @@
       <el-table-column label="缴费方式" align="center" prop="payType" />
       <!-- <el-table-column label="缴费金额" align="center" prop="accumulationNumber" /> -->
       <el-table-column label="公积金基数" align="center" prop="accumulationNumber" width="60px" />
-      <el-table-column label="公积金比例" align="center" prop="accumulationFund" width="60px" />
+      <el-table-column
+        label="公积金比例"
+        align="center"
+        prop="accumulationFund"
+        width="60px"
+        :formatter="DispatchAccumulation"
+      />
       <el-table-column label="公积金起始日期" align="center" prop="accumulationDate" width="95px" />
       <el-table-column label="社保基数" align="center" prop="socialNumber" />
       <el-table-column label="社保起始日期" align="center" prop="socialDate" width="95px" />
@@ -203,7 +209,10 @@
           <el-input v-model="form.personRelation" placeholder="请输入联系方式" />
         </el-form-item>
         <el-form-item label="性别" prop="personSex">
-          <el-input v-model="form.personSex" placeholder="请输入性别" />
+          <el-select v-model="form.personSex" placeholder="请选择性别" clearable size="small">
+            <el-option value="男" label="男"></el-option>
+            <el-option value="女" label="女"></el-option>
+          </el-select>
         </el-form-item>
         <!-- <el-form-item label="散户或单位" prop="personageOrUnit">
           <el-select v-model="form.personageOrUnit" placeholder="请选择散户或单位">
@@ -243,7 +252,14 @@
           <el-input v-model="form.accumulationNumber" placeholder="请输入公积金基数" />
         </el-form-item>
         <el-form-item label="公积金比例" prop="accumulationFund">
-          <el-input v-model="form.accumulationFund" placeholder="请输入公积金比例" />
+          <el-select v-model="form.accumulationFund" placeholder="请选择公积金比例" clearable size="small">
+            <el-option
+              v-for="dict in accumulations"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="公积金起始日期" prop="accumulationDate">
           <el-date-picker
@@ -348,7 +364,7 @@
 </template>
 
 <script>
-import { listInfo, delInfo, addInfo, updateInfo, exportInfo, getDispatch, selectDispatch, downsizing } from "@/api/business/staff";
+import { listInfo, delInfo, addInfo, updateInfo, exportInfo, getDispatch, selectDispatch, downsizing, selectAccumulation } from "@/api/business/staff";
 import { getEmployee, selectEmployee } from "@/api/personageBuill/refund";
 import { getToken } from "@/utils/auth";
 
@@ -387,7 +403,7 @@ export default {
         personName: [{ required: true, message: '请输入员工姓名', trigger: 'blur' }],
         personNation: [{ required: true, message: '请输入民族', trigger: 'blur' }],
         personRelation: [{ required: true, message: '请输入联系方式', trigger: 'blur' }],
-        personSex: [{ required: true, message: '请输入性别', trigger: 'blur' }],
+        personSex: [{ required: true, message: '请选择性别', trigger: 'change' }],
         personageOrUnit: [{ required: true, message: '请选择散户或单位', trigger: 'change' }],
         recordNumber: [{ required: true, message: '请输入档案编号', trigger: 'blur' }],
         refundRate: [{ required: true, message: '请输入返款比例', trigger: 'blur' }],
@@ -398,7 +414,7 @@ export default {
         socialUnemployment: [{ required: true, message: '请输入失业', trigger: 'blur' }],
         payType: [{ required: true, message: '请输入缴费方式', trigger: 'blur' }],
         accumulationNumber: [{ required: true, message: '请输入公积金基数', trigger: 'blur' }],
-        accumulationFund: [{ required: true, message: '请输入公积金比例', trigger: 'blur' }],
+        accumulationFund: [{ required: true, message: '请选择公积金比例', trigger: 'change' }],
         accumulationDate: [{ required: true, message: '请选择公积金起始日期', trigger: 'change' }],
         socialNumber: [{ required: true, message: '请输入社保基数', trigger: 'blur' }],
         socialDate: [{ required: true, message: '请选择社保起始日期', trigger: 'change' }],
@@ -432,7 +448,18 @@ export default {
         headers: { Authorization: "Bearer " + getToken() },
         // 上传的地址
         url: process.env.VUE_APP_BASE_API + "/people/management/importData"
-      }
+      },
+      // 公积金比例
+      accumulations: [
+        { value: 0.05, label: '5%', dictSort: 0.05 },
+        { value: 0.06, label: '6%', dictSort: 0.06 },
+        { value: 0.07, label: '7%', dictSort: 0.07 },
+        { value: 0.08, label: '8%', dictSort: 0.08 },
+        { value: 0.09, label: '9%', dictSort: 0.09 },
+        { value: 0.10, label: '10%', dictSort: 0.10 },
+        { value: 0.11, label: '11%', dictSort: 0.11 },
+        { value: 0.12, label: '12%', dictSort: 0.12 }
+      ]
     };
   },
   created () {
@@ -465,6 +492,10 @@ export default {
       getEmployee({ companyId: id }).then(response => {
         this.employeeOptions = response.rows;
       });
+    },
+    // 公积金字典翻译
+    DispatchAccumulation (row, column) {
+      return selectAccumulation(this.accumulations, row.accumulationFund);
     },
     // 派遣单位字典翻译
     Dispatch (row, column) {
