@@ -182,10 +182,10 @@
 </template>
 
 <script>
-import { listType, getType, delType, addType, updateType, exportType, clearCache } from "@/api/system/dict/type";
+import { listType, getType, delType, addType, updateType, exportType, clearCache } from "@/api/system/dictcategory/type";
 
 export default {
-  name: "Dict",
+  name: "dictcategory",
   data () {
     return {
       // 遮罩层
