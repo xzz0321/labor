@@ -73,8 +73,8 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="类别 1企业合同 2团体合同" prop="category">
-        <el-select v-model="queryParams.category" placeholder="请选择类别 1企业合同 2团体合同" clearable size="small">
+      <el-form-item label="合同类别" prop="category">
+        <el-select v-model="queryParams.category" placeholder="请选择合同类别" clearable size="small">
           <el-option
             v-for="dict in categoryOptions"
             :key="dict.dictValue"
@@ -265,7 +265,7 @@
         <el-form-item label="收款账号名称" prop="gatherName">
           <el-input v-model="form.gatherName" placeholder="请输入收款账号名称" />
         </el-form-item>
-        <el-form-item label="类别 1企业合同 2团体合同">
+        <el-form-item label="合同类别">
           <el-radio-group v-model="form.category">
             <el-radio
               v-for="dict in categoryOptions"
@@ -292,9 +292,6 @@
             value-format="yyyy-MM-dd"
             placeholder="选择更新时间">
           </el-date-picker>
-        </el-form-item>
-        <el-form-item label="删除标识 0否 1是" prop="delFlag">
-          <el-input v-model="form.delFlag" placeholder="请输入删除标识 0否 1是" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -330,7 +327,7 @@ export default {
       open: false,
       // 状态 0启用 1停用字典
       statusOptions: [],
-      // 类别 1企业合同 2团体合同字典
+      // 合同类别字典
       categoryOptions: [],
       // 查询参数
       queryParams: {
@@ -377,7 +374,7 @@ export default {
     statusFormat(row, column) {
       return this.selectDictLabel(this.statusOptions, row.status);
     },
-    // 类别 1企业合同 2团体合同字典翻译
+    // 合同类别字典翻译
     categoryFormat(row, column) {
       return this.selectDictLabel(this.categoryOptions, row.category);
     },
