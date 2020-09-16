@@ -46,35 +46,8 @@
           placeholder="选择签约日期">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="缴费方式" prop="paymentMethod">
-        <el-input
-          v-model="queryParams.paymentMethod"
-          placeholder="请输入缴费方式"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="业务员" prop="salesman">
-        <el-input
-          v-model="queryParams.salesman"
-          placeholder="请输入业务员"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="人事经理" prop="personnelManager">
-        <el-input
-          v-model="queryParams.personnelManager"
-          placeholder="请输入人事经理"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="合同类别" prop="category">
-        <el-select v-model="queryParams.category" placeholder="请选择合同类别" clearable size="small">
+      <el-form-item label="类别" prop="category">
+        <el-select v-model="queryParams.category" placeholder="请选择类别" clearable size="small">
           <el-option
             v-for="dict in categoryOptions"
             :key="dict.dictValue"
@@ -82,14 +55,6 @@
             :value="dict.dictValue"
           />
         </el-select>
-      </el-form-item>
-      <el-form-item label="创建时间" prop="createDate">
-        <el-date-picker clearable size="small" style="width: 200px"
-          v-model="queryParams.createDate"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="选择创建时间">
-        </el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -150,12 +115,23 @@
           <span>{{ parseTime(scope.row.signDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="合同期限" align="center" prop="termConstract" />
+      <el-table-column label="合同起止日期" align="center" prop="constractStartDate" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.constractStartDate, '{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="合同结束日期" align="center" prop="constractEndDate" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.constractEndDate, '{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="缴费方式" align="center" prop="paymentMethod" />
       <el-table-column label="计费方式" align="center" prop="billMethod" />
       <el-table-column label="服务费" align="center" prop="serviceCharge" />
       <el-table-column label="业务员" align="center" prop="salesman" />
       <el-table-column label="人事经理" align="center" prop="personnelManager" />
-      <el-table-column label="续签年限" align="center" prop="renewalTerm" />
+      <el-table-column label="类别" align="center" prop="category" :formatter="categoryFormat" />
       <el-table-column label="更新时间" align="center" prop="updateDate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.updateDate, '{y}-{m}-{d}') }}</span>
@@ -265,7 +241,7 @@
         <el-form-item label="收款账号名称" prop="gatherName">
           <el-input v-model="form.gatherName" placeholder="请输入收款账号名称" />
         </el-form-item>
-        <el-form-item label="合同类别">
+        <el-form-item label="类别">
           <el-radio-group v-model="form.category">
             <el-radio
               v-for="dict in categoryOptions"
@@ -283,14 +259,6 @@
             type="date"
             value-format="yyyy-MM-dd"
             placeholder="选择创建时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="更新时间" prop="updateDate">
-          <el-date-picker clearable size="small" style="width: 200px"
-            v-model="form.updateDate"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择更新时间">
           </el-date-picker>
         </el-form-item>
       </el-form>
@@ -327,7 +295,7 @@ export default {
       open: false,
       // 状态字典
       statusOptions: [],
-      // 合同类别字典
+      // 类别字典
       categoryOptions: [],
       // 查询参数
       queryParams: {
@@ -338,11 +306,7 @@ export default {
         employUnit: undefined,
         status: undefined,
         signDate: undefined,
-        paymentMethod: undefined,
-        salesman: undefined,
-        personnelManager: undefined,
         category: undefined,
-        createDate: undefined,
       },
       // 表单参数
       form: {},
@@ -374,7 +338,7 @@ export default {
     statusFormat(row, column) {
       return this.selectDictLabel(this.statusOptions, row.status);
     },
-    // 合同类别字典翻译
+    // 类别字典翻译
     categoryFormat(row, column) {
       return this.selectDictLabel(this.categoryOptions, row.category);
     },
