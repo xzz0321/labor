@@ -42,7 +42,6 @@ export function delCompany(id) {
     method: 'delete'
   })
 }
-
 // 导出用工单位（企业）
 export function exportCompany(query) {
   return request({
