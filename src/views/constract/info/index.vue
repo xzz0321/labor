@@ -28,8 +28,8 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="状态 0启用 1停用" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择状态 0启用 1停用" clearable size="small">
+      <el-form-item label="状态" prop="status">
+        <el-select v-model="queryParams.status" placeholder="请选择状态" clearable size="small">
           <el-option
             v-for="dict in statusOptions"
             :key="dict.dictValue"
@@ -144,7 +144,7 @@
       <el-table-column label="合同编号" align="center" prop="constractNumber" />
       <el-table-column label="派遣公司" align="center" prop="dispatchCompany" />
       <el-table-column label="用工单位" align="center" prop="employUnit" />
-      <el-table-column label="状态 0启用 1停用" align="center" prop="status" :formatter="statusFormat" />
+      <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat" />
       <el-table-column label="签约日期" align="center" prop="signDate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.signDate, '{y}-{m}-{d}') }}</span>
@@ -202,7 +202,7 @@
         <el-form-item label="用工单位" prop="employUnit">
           <el-input v-model="form.employUnit" placeholder="请输入用工单位" />
         </el-form-item>
-        <el-form-item label="状态 0启用 1停用">
+        <el-form-item label="状态">
           <el-radio-group v-model="form.status">
             <el-radio
               v-for="dict in statusOptions"
@@ -325,7 +325,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
-      // 状态 0启用 1停用字典
+      // 状态字典
       statusOptions: [],
       // 合同类别字典
       categoryOptions: [],
@@ -370,7 +370,7 @@ export default {
         this.loading = false;
       });
     },
-    // 状态 0启用 1停用字典翻译
+    // 状态字典翻译
     statusFormat(row, column) {
       return this.selectDictLabel(this.statusOptions, row.status);
     },
