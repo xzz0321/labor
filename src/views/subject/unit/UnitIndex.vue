@@ -61,7 +61,7 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['business:company:export']"
+          v-hasPermi="['business:company:export2']"
         >导出</el-button>
       </el-col>
       <el-col :span="1.5"><el-button type="info" icon="el-icon-upload2" size="mini" @click="handleImport">导入</el-button></el-col>
@@ -73,21 +73,21 @@
       <el-table-column label="公司编号" align="center" prop="companyNumber" />
       <el-table-column label="公司名称" align="center" prop="companyName" />
       <el-table-column label="法人 (或者团体代表人)" align="center" prop="legalPerson" />
-      <el-table-column label="统一社会信用代码" align="center" prop="socialCreditCode" />
+      <!-- <el-table-column label="统一社会信用代码" align="center" prop="socialCreditCode" /> -->
       <el-table-column label="开户银行" align="center" prop="depositBank" />
       <el-table-column label="开户行户名" align="center" prop="bankName" />
       <el-table-column label="开户行账号" align="center" prop="bankAccountNumber" />
       <el-table-column label="地址" align="center" prop="address" />
       <el-table-column label="联系人" align="center" prop="linkman" />
       <el-table-column label="联系电话" align="center" prop="replationPhone" />
-      <el-table-column label="开票类型" align="center" prop="ticketType" />
+      <!-- <el-table-column label="开票类型" align="center" prop="ticketType" />
       <el-table-column label="开票信息1" align="center" prop="ticketMessage1" />
       <el-table-column label="开票信息2" align="center" prop="ticketMessage2" />
       <el-table-column label="开票信息3" align="center" prop="ticketMessage3" />
       <el-table-column label="开票信息4" align="center" prop="ticketMessage4" />
-      <el-table-column label="开票信息5" align="center" prop="ticketMessage5" />
-      <el-table-column label="业务经理" align="center" prop="businessPerson" />
-      <el-table-column label="人力经理" align="center" prop="humanManager" />
+      <el-table-column label="开票信息5" align="center" prop="ticketMessage5" /> -->
+      <!-- <el-table-column label="业务经理" align="center" prop="businessPerson" /> -->
+      <!-- <el-table-column label="人力经理" align="center" prop="humanManager" /> -->
       <el-table-column label="业务员" align="center" prop="salesman" />
       <el-table-column label="介绍人" align="center" prop="introducer" />
       <el-table-column label="创建时间" align="center" prop="createDate" width="180">
@@ -134,9 +134,9 @@
         <el-form-item label="法人 (或者团体代表人)" prop="legalPerson">
           <el-input v-model="form.legalPerson" placeholder="请输入法人 (或者团体代表人)" />
         </el-form-item>
-        <el-form-item label="统一社会信用代码" prop="socialCreditCode">
+        <!-- <el-form-item label="统一社会信用代码" prop="socialCreditCode">
           <el-input v-model="form.socialCreditCode" placeholder="请输入统一社会信用代码" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="开户银行" prop="depositBank">
           <el-input v-model="form.depositBank" placeholder="请输入开户银行" />
         </el-form-item>
@@ -155,7 +155,7 @@
         <el-form-item label="联系电话" prop="replationPhone">
           <el-input v-model="form.replationPhone" placeholder="请输入联系电话" />
         </el-form-item>
-        <el-form-item label="开票类型">
+        <!-- <el-form-item label="开票类型">
           <el-select v-model="form.ticketType" placeholder="请选择开票类型">
             <el-option label="请选择字典生成" value />
           </el-select>
@@ -180,7 +180,7 @@
         </el-form-item>
         <el-form-item label="人力经理" prop="humanManager">
           <el-input v-model="form.humanManager" placeholder="请输入人力经理" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="业务员" prop="salesman">
           <el-input v-model="form.salesman" placeholder="请输入业务员" />
         </el-form-item>
@@ -238,12 +238,12 @@
 
 <script>
 import {
-  listCompany,
+  listCompany2,
   getCompany,
   delCompany,
   addCompany,
   updateCompany,
-  exportCompany,
+  exportCompany2,
 } from "@/api/subject/company";
 // 导入模板接口importTemplate
 import { importTemplate } from "@/api/system/user";
@@ -304,13 +304,13 @@ export default {
         legalPerson: [
           { required: true, message: "请输入法人", trigger: "blur" },
         ],
-        socialCreditCode: [
-          {
-            required: true,
-            message: "请输入统一社会信用代码",
-            trigger: "blur",
-          },
-        ],
+        // socialCreditCode: [
+        //   {
+        //     required: true,
+        //     message: "请输入统一社会信用代码",
+        //     trigger: "blur",
+        //   },
+        // ],
         depositBank: [
           { required: true, message: "请输入开户银行", trigger: "blur" },
         ],
@@ -325,30 +325,30 @@ export default {
         replationPhone: [
           { required: true, message: "请输入联系电话", trigger: "blur" },
         ],
-        ticketType: [
-          { required: true, message: "请选择开票类型", trigger: "blur" },
-        ],
-        ticketMessage1: [
-          { required: true, message: "请输入开票信息1", trigger: "blur" },
-        ],
-        ticketMessage2: [
-          { required: true, message: "请输入开票信息2", trigger: "blur" },
-        ],
-        ticketMessage3: [
-          { required: true, message: "请输入开票信息3", trigger: "blur" },
-        ],
-        ticketMessage4: [
-          { required: true, message: "请输入开票信息4", trigger: "blur" },
-        ],
-        ticketMessage5: [
-          { required: true, message: "请输入开票信息5", trigger: "blur" },
-        ],
-        businessPerson: [
-          { required: true, message: "请输入业务经理", trigger: "blur" },
-        ],
-        humanManager: [
-          { required: true, message: "请输入人力经理", trigger: "blur" },
-        ],
+        // ticketType: [
+        //   { required: true, message: "请选择开票类型", trigger: "blur" },
+        // ],
+        // ticketMessage1: [
+        //   { required: true, message: "请输入开票信息1", trigger: "blur" },
+        // ],
+        // ticketMessage2: [
+        //   { required: true, message: "请输入开票信息2", trigger: "blur" },
+        // ],
+        // ticketMessage3: [
+        //   { required: true, message: "请输入开票信息3", trigger: "blur" },
+        // ],
+        // ticketMessage4: [
+        //   { required: true, message: "请输入开票信息4", trigger: "blur" },
+        // ],
+        // ticketMessage5: [
+        //   { required: true, message: "请输入开票信息5", trigger: "blur" },
+        // ],
+        // businessPerson: [
+        //   { required: true, message: "请输入业务经理", trigger: "blur" },
+        // ],
+        // humanManager: [
+        //   { required: true, message: "请输入人力经理", trigger: "blur" },
+        // ],
         salesman: [
           { required: true, message: "请输入业务员", trigger: "blur" },
         ],
@@ -376,7 +376,7 @@ export default {
     /** 查询用工单位（企业）列表 */
     getList() {
       this.loading = true;
-      listCompany(this.queryParams).then((response) => {
+      listCompany2(this.queryParams).then((response) => {
         this.companyList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -508,7 +508,7 @@ export default {
         type: "warning",
       })
         .then(function () {
-          return exportCompany(queryParams);
+          return exportCompany2(queryParams);
         })
         .then((response) => {
           this.download(response.msg);

@@ -9,6 +9,15 @@ export function listCompany(query) {
   })
 }
 
+// 查询用工单位（企业）列表
+export function listCompany2(query) {
+  return request({
+    url: '/business/company/list2',
+    method: 'get',
+    params: query
+  })
+}
+
 // 查询用工单位（企业）详细
 export function getCompany(id) {
   return request({
@@ -46,6 +55,15 @@ export function delCompany(id) {
 export function exportCompany(query) {
   return request({
     url: '/business/company/export',
+    method: 'get',
+    params: query
+  })
+}
+
+// 导出用工单位（企业）
+export function exportCompany2(query) {
+  return request({
+    url: '/business/company/export2',
     method: 'get',
     params: query
   })
