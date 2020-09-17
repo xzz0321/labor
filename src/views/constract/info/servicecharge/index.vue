@@ -19,10 +19,10 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="用工单位" prop="employUnit">
+      <el-form-item label="员工姓名" prop="userName">
         <el-input
-          v-model="queryParams.employUnit"
-          placeholder="请输入用工单位"
+          v-model="queryParams.userName"
+          placeholder="请输入员工姓名"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -46,15 +46,76 @@
           placeholder="选择签约日期">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="类别" prop="category">
-        <el-select v-model="queryParams.category" placeholder="请选择类别" clearable size="small">
+      <el-form-item label="是否收取服务费" prop="serviceCharge">
+        <el-select v-model="queryParams.serviceCharge" placeholder="请选择是否收取服务费" clearable size="small">
           <el-option
-            v-for="dict in categoryOptions"
+            v-for="dict in serviceChargeOptions"
             :key="dict.dictValue"
             :label="dict.dictLabel"
             :value="dict.dictValue"
           />
         </el-select>
+      </el-form-item>
+      <el-form-item label="月数" prop="monthNumber">
+        <el-input
+          v-model="queryParams.monthNumber"
+          placeholder="请输入月数"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="费用名称" prop="costName">
+        <el-input
+          v-model="queryParams.costName"
+          placeholder="请输入费用名称"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="费用金额" prop="costMoney">
+        <el-input
+          v-model="queryParams.costMoney"
+          placeholder="请输入费用金额"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="业务员" prop="salesman">
+        <el-input
+          v-model="queryParams.salesman"
+          placeholder="请输入业务员"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="人事经理" prop="personnelManager">
+        <el-input
+          v-model="queryParams.personnelManager"
+          placeholder="请输入人事经理"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="创建时间" prop="createDate">
+        <el-date-picker clearable size="small" style="width: 200px"
+          v-model="queryParams.createDate"
+          type="date"
+          value-format="yyyy-MM-dd"
+          placeholder="选择创建时间">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="更新时间" prop="updateDate">
+        <el-date-picker clearable size="small" style="width: 200px"
+          v-model="queryParams.updateDate"
+          type="date"
+          value-format="yyyy-MM-dd"
+          placeholder="选择更新时间">
+        </el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -69,7 +130,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['constract:info:add']"
+          v-hasPermi="['constract:servicecharge:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -79,7 +140,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['constract:info:edit']"
+          v-hasPermi="['constract:servicecharge:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -89,7 +150,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['constract:info:remove']"
+          v-hasPermi="['constract:servicecharge:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -98,17 +159,17 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['constract:info:export']"
+          v-hasPermi="['constract:servicecharge:export']"
         >导出</el-button>
       </el-col>
     </el-row>
 
-    <el-table v-loading="loading" :data="infoList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="servicechargeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="主键ID" align="center" prop="id" />
       <el-table-column label="合同编号" align="center" prop="constractNumber" />
       <el-table-column label="派遣公司" align="center" prop="dispatchCompany" />
-      <el-table-column label="用工单位" align="center" prop="employUnit" />
+      <el-table-column label="员工姓名" align="center" prop="userName" />
       <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat" />
       <el-table-column label="签约日期" align="center" prop="signDate" width="180">
         <template slot-scope="scope">
@@ -126,12 +187,18 @@
           <span>{{ parseTime(scope.row.constractEndDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="缴费方式" align="center" prop="paymentMethod" />
-      <el-table-column label="计费方式" align="center" prop="billMethod" />
-      <el-table-column label="服务费" align="center" prop="serviceCharge" />
+      <el-table-column label="是否收取服务费" align="center" prop="serviceCharge" :formatter="serviceChargeFormat" />
+      <el-table-column label="月数" align="center" prop="monthNumber" />
+      <el-table-column label="费用名称" align="center" prop="costName" />
+      <el-table-column label="费用金额" align="center" prop="costMoney" />
       <el-table-column label="业务员" align="center" prop="salesman" />
+      <el-table-column label="社保方案" align="center" prop="socialScheme" />
       <el-table-column label="人事经理" align="center" prop="personnelManager" />
-      <el-table-column label="类别" align="center" prop="category" :formatter="categoryFormat" />
+      <el-table-column label="创建时间" align="center" prop="createDate" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.createDate, '{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="更新时间" align="center" prop="updateDate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.updateDate, '{y}-{m}-{d}') }}</span>
@@ -145,14 +212,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['constract:info:edit']"
+            v-hasPermi="['constract:servicecharge:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['constract:info:remove']"
+            v-hasPermi="['constract:servicecharge:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -166,7 +233,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改企业合同和团队合同对话框 -->
+    <!-- 添加或修改个人合同对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="合同编号" prop="constractNumber">
@@ -175,8 +242,8 @@
         <el-form-item label="派遣公司" prop="dispatchCompany">
           <el-input v-model="form.dispatchCompany" placeholder="请输入派遣公司" />
         </el-form-item>
-        <el-form-item label="用工单位" prop="employUnit">
-          <el-input v-model="form.employUnit" placeholder="请输入用工单位" />
+        <el-form-item label="员工姓名" prop="userName">
+          <el-input v-model="form.userName" placeholder="请输入员工姓名" />
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
@@ -214,44 +281,41 @@
             placeholder="选择合同结束日期">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="缴费方式" prop="paymentMethod">
-          <el-input v-model="form.paymentMethod" placeholder="请输入缴费方式" />
-        </el-form-item>
-        <el-form-item label="计费方式" prop="billMethod">
-          <el-input v-model="form.billMethod" placeholder="请输入计费方式" />
-        </el-form-item>
-        <el-form-item label="服务费" prop="serviceCharge">
-          <el-input v-model="form.serviceCharge" placeholder="请输入服务费" />
-        </el-form-item>
-        <el-form-item label="补贴回款退费方式" prop="returnedMethod">
-          <el-input v-model="form.returnedMethod" placeholder="请输入补贴回款退费方式" />
-        </el-form-item>
-        <el-form-item label="补贴回款退费名称" prop="returnedName">
-          <el-input v-model="form.returnedName" placeholder="请输入补贴回款退费名称" />
-        </el-form-item>
-        <el-form-item label="补贴回款退费金额" prop="returnedMoney">
-          <el-input v-model="form.returnedMoney" placeholder="请输入补贴回款退费金额" />
-        </el-form-item>
-        <el-form-item label="业务员" prop="salesman">
-          <el-input v-model="form.salesman" placeholder="请输入业务员" />
-        </el-form-item>
-        <el-form-item label="人事经理" prop="personnelManager">
-          <el-input v-model="form.personnelManager" placeholder="请输入人事经理" />
-        </el-form-item>
-        <el-form-item label="收款账号名称" prop="gatherName">
-          <el-input v-model="form.gatherName" placeholder="请输入收款账号名称" />
-        </el-form-item>
-        <el-form-item label="类别">
-          <el-radio-group v-model="form.category">
+        <el-form-item label="是否收取服务费">
+          <el-radio-group v-model="form.serviceCharge">
             <el-radio
-              v-for="dict in categoryOptions"
+              v-for="dict in serviceChargeOptions"
               :key="dict.dictValue"
               :label="parseInt(dict.dictValue)"
             >{{dict.dictLabel}}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="续签年限" prop="renewalTerm">
-          <el-input v-model="form.renewalTerm" placeholder="请输入续签年限" />
+        <el-form-item label="缴费方式" prop="paymentMethod">
+          <el-input v-model="form.paymentMethod" placeholder="请输入缴费方式" />
+        </el-form-item>
+        <el-form-item label="月数" prop="monthNumber">
+          <el-input v-model="form.monthNumber" placeholder="请输入月数" />
+        </el-form-item>
+        <el-form-item label="费用名称" prop="costName">
+          <el-input v-model="form.costName" placeholder="请输入费用名称" />
+        </el-form-item>
+        <el-form-item label="费用金额" prop="costMoney">
+          <el-input v-model="form.costMoney" placeholder="请输入费用金额" />
+        </el-form-item>
+        <el-form-item label="业务员" prop="salesman">
+          <el-input v-model="form.salesman" placeholder="请输入业务员" />
+        </el-form-item>
+        <el-form-item label="约定工资" prop="agreedSalary">
+          <el-input v-model="form.agreedSalary" placeholder="请输入约定工资" />
+        </el-form-item>
+        <el-form-item label="社保方案" prop="socialScheme">
+          <el-input v-model="form.socialScheme" placeholder="请输入社保方案" />
+        </el-form-item>
+        <el-form-item label="公积金方案" prop="reserverScheme">
+          <el-input v-model="form.reserverScheme" placeholder="请输入公积金方案" />
+        </el-form-item>
+        <el-form-item label="人事经理" prop="personnelManager">
+          <el-input v-model="form.personnelManager" placeholder="请输入人事经理" />
         </el-form-item>
         <el-form-item label="创建时间" prop="createDate">
           <el-date-picker clearable size="small" style="width: 200px"
@@ -259,6 +323,14 @@
             type="date"
             value-format="yyyy-MM-dd"
             placeholder="选择创建时间">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="更新时间" prop="updateDate">
+          <el-date-picker clearable size="small" style="width: 200px"
+            v-model="form.updateDate"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="选择更新时间">
           </el-date-picker>
         </el-form-item>
       </el-form>
@@ -271,10 +343,10 @@
 </template>
 
 <script>
-import { listInfo, getInfo, delInfo, addInfo, updateInfo, exportInfo } from "@/api/constract/info";
+import { listServicecharge, getServicecharge, delServicecharge, addServicecharge, updateServicecharge, exportServicecharge } from "@/api/constract/servicecharge";
 
 export default {
-  name: "Info",
+  name: "Servicecharge",
   data() {
     return {
       // 遮罩层
@@ -287,26 +359,33 @@ export default {
       multiple: true,
       // 总条数
       total: 0,
-      // 企业合同和团队合同表格数据
-      infoList: [],
+      // 个人合同表格数据
+      servicechargeList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
       // 状态字典
       statusOptions: [],
-      // 类别字典
-      categoryOptions: [],
+      // 是否收取服务费字典
+      serviceChargeOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
         constractNumber: undefined,
         dispatchCompany: undefined,
-        employUnit: undefined,
+        userName: undefined,
         status: undefined,
         signDate: undefined,
-        category: undefined,
+        serviceCharge: undefined,
+        monthNumber: undefined,
+        costName: undefined,
+        costMoney: undefined,
+        salesman: undefined,
+        personnelManager: undefined,
+        createDate: undefined,
+        updateDate: undefined,
       },
       // 表单参数
       form: {},
@@ -320,16 +399,16 @@ export default {
     this.getDicts("constract_status").then(response => {
       this.statusOptions = response.data;
     });
-    this.getDicts("constract_category").then(response => {
-      this.categoryOptions = response.data;
+    this.getDicts("constract_service_charge").then(response => {
+      this.serviceChargeOptions = response.data;
     });
   },
   methods: {
-    /** 查询企业合同和团队合同列表 */
+    /** 查询个人合同列表 */
     getList() {
       this.loading = true;
-      listInfo(this.queryParams).then(response => {
-        this.infoList = response.rows;
+      listServicecharge(this.queryParams).then(response => {
+        this.servicechargeList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -338,9 +417,9 @@ export default {
     statusFormat(row, column) {
       return this.selectDictLabel(this.statusOptions, row.status);
     },
-    // 类别字典翻译
-    categoryFormat(row, column) {
-      return this.selectDictLabel(this.categoryOptions, row.category);
+    // 是否收取服务费字典翻译
+    serviceChargeFormat(row, column) {
+      return this.selectDictLabel(this.serviceChargeOptions, row.serviceCharge);
     },
     // 取消按钮
     cancel() {
@@ -353,23 +432,22 @@ export default {
         id: undefined,
         constractNumber: undefined,
         dispatchCompany: undefined,
-        employUnit: undefined,
+        userName: undefined,
         status: "0",
         signDate: undefined,
         termConstract: undefined,
         constractStartDate: undefined,
         constractEndDate: undefined,
+        serviceCharge: "0",
         paymentMethod: undefined,
-        billMethod: undefined,
-        serviceCharge: undefined,
-        returnedMethod: undefined,
-        returnedName: undefined,
-        returnedMoney: undefined,
+        monthNumber: undefined,
+        costName: undefined,
+        costMoney: undefined,
         salesman: undefined,
+        agreedSalary: undefined,
+        socialScheme: undefined,
+        reserverScheme: undefined,
         personnelManager: undefined,
-        gatherName: undefined,
-        category: "0",
-        renewalTerm: undefined,
         createDate: undefined,
         createBy: undefined,
         updateDate: undefined,
@@ -399,16 +477,16 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加企业合同和团队合同";
+      this.title = "添加个人合同";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
-      getInfo(id).then(response => {
+      getServicecharge(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改企业合同和团队合同";
+        this.title = "修改个人合同";
       });
     },
     /** 提交按钮 */
@@ -416,7 +494,7 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {
-            updateInfo(this.form).then(response => {
+            updateServicecharge(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
                 this.open = false;
@@ -424,7 +502,7 @@ export default {
               }
             });
           } else {
-            addInfo(this.form).then(response => {
+            addServicecharge(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
                 this.open = false;
@@ -438,12 +516,12 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$confirm('是否确认删除企业合同和团队合同编号为"' + ids + '"的数据项?', "警告", {
+      this.$confirm('是否确认删除个人合同编号为"' + ids + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
-          return delInfo(ids);
+          return delServicecharge(ids);
         }).then(() => {
           this.getList();
           this.msgSuccess("删除成功");
@@ -452,12 +530,12 @@ export default {
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有企业合同和团队合同数据项?', "警告", {
+      this.$confirm('是否确认导出所有个人合同数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
-          return exportInfo(queryParams);
+          return exportServicecharge(queryParams);
         }).then(response => {
           this.download(response.msg);
         }).catch(function() {});
