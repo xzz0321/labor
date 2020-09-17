@@ -38,85 +38,6 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="签约日期" prop="signDate">
-        <el-date-picker clearable size="small" style="width: 200px"
-          v-model="queryParams.signDate"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="选择签约日期">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="是否收取服务费" prop="serviceCharge">
-        <el-select v-model="queryParams.serviceCharge" placeholder="请选择是否收取服务费" clearable size="small">
-          <el-option
-            v-for="dict in serviceChargeOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="月数" prop="monthNumber">
-        <el-input
-          v-model="queryParams.monthNumber"
-          placeholder="请输入月数"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="费用名称" prop="costName">
-        <el-input
-          v-model="queryParams.costName"
-          placeholder="请输入费用名称"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="费用金额" prop="costMoney">
-        <el-input
-          v-model="queryParams.costMoney"
-          placeholder="请输入费用金额"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="业务员" prop="salesman">
-        <el-input
-          v-model="queryParams.salesman"
-          placeholder="请输入业务员"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="人事经理" prop="personnelManager">
-        <el-input
-          v-model="queryParams.personnelManager"
-          placeholder="请输入人事经理"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="创建时间" prop="createDate">
-        <el-date-picker clearable size="small" style="width: 200px"
-          v-model="queryParams.createDate"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="选择创建时间">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="更新时间" prop="updateDate">
-        <el-date-picker clearable size="small" style="width: 200px"
-          v-model="queryParams.updateDate"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="选择更新时间">
-        </el-date-picker>
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -182,17 +103,7 @@
           <span>{{ parseTime(scope.row.constractStartDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="合同结束日期" align="center" prop="constractEndDate" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.constractEndDate, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="是否收取服务费" align="center" prop="serviceCharge" :formatter="serviceChargeFormat" />
-      <el-table-column label="月数" align="center" prop="monthNumber" />
-      <el-table-column label="费用名称" align="center" prop="costName" />
-      <el-table-column label="费用金额" align="center" prop="costMoney" />
       <el-table-column label="业务员" align="center" prop="salesman" />
-      <el-table-column label="社保方案" align="center" prop="socialScheme" />
       <el-table-column label="人事经理" align="center" prop="personnelManager" />
       <el-table-column label="创建时间" align="center" prop="createDate" width="180">
         <template slot-scope="scope">
@@ -281,14 +192,8 @@
             placeholder="选择合同结束日期">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="是否收取服务费">
-          <el-radio-group v-model="form.serviceCharge">
-            <el-radio
-              v-for="dict in serviceChargeOptions"
-              :key="dict.dictValue"
-              :label="parseInt(dict.dictValue)"
-            >{{dict.dictLabel}}</el-radio>
-          </el-radio-group>
+        <el-form-item label="是否收取服务费 0否 1是" prop="serviceCharge">
+          <el-input v-model="form.serviceCharge" placeholder="请输入是否收取服务费 0否 1是" />
         </el-form-item>
         <el-form-item label="缴费方式" prop="paymentMethod">
           <el-input v-model="form.paymentMethod" placeholder="请输入缴费方式" />
@@ -367,8 +272,6 @@ export default {
       open: false,
       // 状态字典
       statusOptions: [],
-      // 是否收取服务费字典
-      serviceChargeOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -377,15 +280,6 @@ export default {
         dispatchCompany: undefined,
         userName: undefined,
         status: undefined,
-        signDate: undefined,
-        serviceCharge: undefined,
-        monthNumber: undefined,
-        costName: undefined,
-        costMoney: undefined,
-        salesman: undefined,
-        personnelManager: undefined,
-        createDate: undefined,
-        updateDate: undefined,
       },
       // 表单参数
       form: {},
@@ -398,9 +292,6 @@ export default {
     this.getList();
     this.getDicts("constract_status").then(response => {
       this.statusOptions = response.data;
-    });
-    this.getDicts("constract_service_charge").then(response => {
-      this.serviceChargeOptions = response.data;
     });
   },
   methods: {
@@ -416,10 +307,6 @@ export default {
     // 状态字典翻译
     statusFormat(row, column) {
       return this.selectDictLabel(this.statusOptions, row.status);
-    },
-    // 是否收取服务费字典翻译
-    serviceChargeFormat(row, column) {
-      return this.selectDictLabel(this.serviceChargeOptions, row.serviceCharge);
     },
     // 取消按钮
     cancel() {
@@ -438,7 +325,7 @@ export default {
         termConstract: undefined,
         constractStartDate: undefined,
         constractEndDate: undefined,
-        serviceCharge: "0",
+        serviceCharge: undefined,
         paymentMethod: undefined,
         monthNumber: undefined,
         costName: undefined,
@@ -453,7 +340,7 @@ export default {
         updateDate: undefined,
         updateBy: undefined,
         remark: undefined,
-        delFlag: undefined
+        delFlag: "0"
       };
       this.resetForm("form");
     },
