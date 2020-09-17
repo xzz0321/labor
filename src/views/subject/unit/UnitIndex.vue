@@ -70,9 +70,9 @@
     <el-table v-loading="loading" :data="companyList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <!-- <el-table-column label="用工单位(企业)主键" align="center" prop="id" /> -->
-      <el-table-column label="公司编号" align="center" prop="companyNumber" />
+      <el-table-column label="团体编号" align="center" prop="companyNumber" />
       <el-table-column label="公司名称" align="center" prop="companyName" />
-      <el-table-column label="法人 (或者团体代表人)" align="center" prop="legalPerson" />
+      <el-table-column label="团体代表人" align="center" prop="legalPerson" />
       <!-- <el-table-column label="统一社会信用代码" align="center" prop="socialCreditCode" /> -->
       <el-table-column label="开户银行" align="center" prop="depositBank" />
       <el-table-column label="开户行户名" align="center" prop="bankName" />
@@ -125,14 +125,14 @@
     <!-- 添加或修改用工单位（企业）对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="180px">
-        <el-form-item label="公司编号" prop="companyNumber">
-          <el-input v-model="form.companyNumber" placeholder="请输入公司编号" />
+        <el-form-item label="团体编号" prop="companyNumber">
+          <el-input v-model="form.companyNumber" placeholder="请输入团体编号" />
         </el-form-item>
         <el-form-item label="公司名称" prop="companyName">
           <el-input v-model="form.companyName" placeholder="请输入公司名称" />
         </el-form-item>
-        <el-form-item label="法人 (或者团体代表人)" prop="legalPerson">
-          <el-input v-model="form.legalPerson" placeholder="请输入法人 (或者团体代表人)" />
+        <el-form-item label="团体代表人" prop="legalPerson">
+          <el-input v-model="form.legalPerson" placeholder="请输入团体代表人" />
         </el-form-item>
         <!-- <el-form-item label="统一社会信用代码" prop="socialCreditCode">
           <el-input v-model="form.socialCreditCode" placeholder="请输入统一社会信用代码" />
@@ -296,7 +296,7 @@ export default {
       // 表单校验
       rules: {
         companyNumber: [
-          { required: true, message: "请输入公司编号", trigger: "blur" },
+          { required: true, message: "请输入团体编号", trigger: "blur" },
         ],
         companyName: [
           { required: true, message: "请输入公司名称", trigger: "blur" },
