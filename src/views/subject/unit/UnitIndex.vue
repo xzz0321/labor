@@ -69,7 +69,7 @@
 
     <el-table v-loading="loading" :data="companyList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <!-- <el-table-column label="用工单位(企业)主键" align="center" prop="id" /> -->
+      <!-- <el-table-column label="用工单位(团体)主键" align="center" prop="id" /> -->
       <el-table-column label="团体编号" align="center" prop="companyNumber" />
       <el-table-column label="公司名称" align="center" prop="companyName" />
       <el-table-column label="团体代表人" align="center" prop="legalPerson" />
@@ -122,7 +122,7 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-    <!-- 添加或修改用工单位（企业）对话框 -->
+    <!-- 添加或修改用工单位（团体）对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="180px">
         <el-form-item label="团体编号" prop="companyNumber">
@@ -190,9 +190,9 @@
         <el-form-item label="合同编号" prop="contractNumber">
           <el-input v-model="form.contractNumber" placeholder="请输入合同编号" />
         </el-form-item>
-        <el-form-item label="类别  1是公司 2是团体" prop="category">
+        <!-- <el-form-item label="类别  1是公司 2是团体" prop="category">
           <el-input v-model="form.category" placeholder="请输入类别  1是公司 2是团体" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" placeholder="请输入备注" />
         </el-form-item>
@@ -263,7 +263,7 @@ export default {
       multiple: true,
       // 总条数
       total: 0,
-      // 用工单位（企业）表格数据
+      // 用工单位（团体）表格数据
       companyList: [],
       // 弹出层标题
       title: "",
@@ -373,7 +373,7 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询用工单位（企业）列表 */
+    /** 查询用工单位（团体）列表 */
     getList() {
       this.loading = true;
       listCompany2(this.queryParams).then((response) => {
@@ -442,7 +442,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加用工单位（企业）";
+      this.title = "添加用工单位（团体）";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -451,7 +451,7 @@ export default {
       getCompany(id).then((response) => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改用工单位（企业）";
+        this.title = "修改用工单位（团体）";
       });
     },
     /** 提交按钮 */
@@ -482,7 +482,7 @@ export default {
     handleDelete(row) {
       const ids = row.id || this.ids;
       this.$confirm(
-        '是否确认删除用工单位（企业）编号为"' + ids + '"的数据项?',
+        '是否确认删除用工单位（团体）编号为"' + ids + '"的数据项?',
         "警告",
         {
           confirmButtonText: "确定",
@@ -502,7 +502,7 @@ export default {
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
-      this.$confirm("是否确认导出所有用工单位（企业）数据项?", "警告", {
+      this.$confirm("是否确认导出所有用工单位（团体）数据项?", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",

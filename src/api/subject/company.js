@@ -9,7 +9,7 @@ export function listCompany(query) {
   })
 }
 
-// 查询用工单位（企业）列表
+// 查询用工单位（团体）列表
 export function listCompany2(query) {
   return request({
     url: '/business/company/list2',
@@ -60,7 +60,7 @@ export function exportCompany(query) {
   })
 }
 
-// 导出用工单位（企业）
+// 导出用工单位（团体）
 export function exportCompany2(query) {
   return request({
     url: '/business/company/export2',

@@ -190,9 +190,9 @@
         <el-form-item label="合同编号" prop="contractNumber">
           <el-input v-model="form.contractNumber" placeholder="请输入合同编号" />
         </el-form-item>
-        <el-form-item label="类别  1是公司 2是团体" prop="category">
+        <!-- <el-form-item label="类别  1是公司 2是团体" prop="category">
           <el-input v-model="form.category" placeholder="请输入类别  1是公司 2是团体" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" placeholder="请输入备注" />
         </el-form-item>
@@ -358,13 +358,13 @@ export default {
         contractNumber: [
           { required: true, message: "请输入合同编号", trigger: "blur" },
         ],
-        category: [
-          {
-            required: true,
-            message: "请输入类别  1是公司 2是团体",
-            trigger: "blur",
-          },
-        ],
+        // category: [
+        //   {
+        //     required: true,
+        //     message: "请输入类别  1是公司 2是团体",
+        //     trigger: "blur",
+        //   },
+        // ],
         remark: [{ required: true, message: "请输入备注", trigger: "blur" }],
       },
     };
